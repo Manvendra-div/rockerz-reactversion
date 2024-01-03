@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 const fetchData = async (URL) => {
   try {
     const response = await axios.get(URL);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -56,7 +55,6 @@ const PlayList = ({ playlist, setSongFromPlaylist }) => {
 };
 const SongCard = ({ song, position, setSongObject, setPlaylist }) => {
   const launchPlayer = (data) => {
-    console.log("coming from songcard", data);
     setSongObject(data);
     setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
@@ -104,7 +102,6 @@ const Hero = ({ setTrack }) => {
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [togglePlayListSection, settogglePlayListSection] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log("playlist data", playlistData);
   const launchPlayList = () => {
     settogglePlayListSection(!togglePlayListSection);
   };
