@@ -24,7 +24,7 @@ const PlayList = ({ playlist, setSongFromPlaylist }) => {
           play a track to add.
         </p>
       )}
-      <div class="h-[260px] md:h-[350px] overflow-y-scroll">
+      <div class="flex flex-col justify-center flex-col-reverse h-[260px] md:h-[350px] overflow-y-scroll">
         {playlist &&
           playlist.map((song) => (
             <div
