@@ -12,21 +12,27 @@ const fetchData = async (URL) => {
     console.error("Error fetching data:", error);
   }
 };
-const Hero = ({ setTrack }) => {
+
+
+const Hero = ({ setTrack,loadinFunc }) => {
   const [songSectionData, setSongSectionData] = useState(null);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
+
   const [isNotify, setIsNotifyVisible] = useState(false);
   const fetchSearchData = async (e) => {
     finalSearchQueryFunc();
-    const searchedata = (
-      await fetchData(
-        `https://saavn.me/search/songs?query=${e}&page=1&limit=10`
-      )
-    ).data.results;
-    setSongSectionData(searchedata);
-    console.log(searchedata);
+    loadinFunc(true);
+    setTimeout(async () => {
+      const searchedata = (
+        await fetchData(
+          `https://saavn.me/search/songs?query=${e}&page=1&limit=10`
+        )
+      ).data.results;
+      setSongSectionData(searchedata);
+      loadinFunc(false);
+    }, 500);
   };
   const pushNotification = () => {
     setIsNotifyVisible(true);
@@ -35,10 +41,14 @@ const Hero = ({ setTrack }) => {
     }, 4000);
   };
   const fetchHomePage = async () => {
-    const homepagedata = (
-      await fetchData("https://saavn.me/modules?language=english")
-    ).data.trending.songs;
-    setSongSectionData(homepagedata);
+    loadinFunc(true);
+    setTimeout(async () => {
+      const homepagedata = (
+        await fetchData("https://saavn.me/modules?language=english")
+      ).data.trending.songs;
+      setSongSectionData(homepagedata);
+      loadinFunc(false);
+    }, 1000);
   };
   useEffect(() => {
     if (!datafromSearchToggle) {
@@ -127,11 +137,9 @@ const Hero = ({ setTrack }) => {
   };
   return (
     <div className="hero-container">
+                
       {isNotify && (
-        <div
-          className="notify-container"
-          role="alert"
-        >
+        <div className="notify-container" role="alert">
           <svg
             className="fill-current w-4 h-4 mr-2"
             xmlns="http://www.w3.org/2000/svg"
