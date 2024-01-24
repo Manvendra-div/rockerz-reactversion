@@ -1,10 +1,114 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    background-color:#18191d;
-    font-family: 'Fira Sans', sans-serif;
-    color: rgb(255 255 255);
+  background-color: #18191d;
+  font-family: "Fira Sans", sans-serif;
+  color: rgb(255 255 255);
+}
+
+.navHeader {
+  @apply sticky top-0 flex justify-center items-center backdrop-blur-lg bg-white/10 px-5 py-3 rounded-b-lg shadow-lg w-full z-20;
+}
+.navResponsive {
+  @apply flex justify-between items-center w-[95%] md:w-[85%] 2xl:w-[1440px];
+}
+.shareBtn {
+  @apply mx-3 backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md p-2 rounded-md w-[15%] md:w-[5%] text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];
+}
+.footerDiv {
+  @apply border-t bg-[#18191D] w-full absolute bg-opacity-75;
+}
+.footerContainer {
+  @apply container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col;
+}
+.playerSuperContainerConst {
+  @apply rounded-lg backdrop-blur-lg bg-zinc-800/60 md:flex md:flex-col md:items-center md:justify-center;
+}
+.playerSlider {
+  @apply w-full bg-transparent cursor-pointer appearance-none disabled:opacity-50 disabled:pointer-events-none focus:outline-none
+    [&::-webkit-slider-thumb]:w-2.5
+    [&::-webkit-slider-thumb]:h-2.5
+    [&::-webkit-slider-thumb]:-mt-0.5
+    [&::-webkit-slider-thumb]:appearance-none
+    [&::-webkit-slider-thumb]:bg-white
+    [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(234,88,12,1)]
+    [&::-webkit-slider-thumb]:rounded-full
+    [&::-webkit-slider-thumb]:transition-all
+    [&::-webkit-slider-thumb]:duration-150
+    [&::-webkit-slider-thumb]:ease-in-out
+    [&::-webkit-slider-thumb]:dark:bg-slate-700
+    
+    [&::-moz-range-thumb]:w-2.5
+    [&::-moz-range-thumb]:h-2.5
+    [&::-moz-range-thumb]:appearance-none
+    [&::-moz-range-thumb]:bg-white
+    [&::-moz-range-thumb]:border-4
+    [&::-moz-range-thumb]:border-blue-600
+    [&::-moz-range-thumb]:rounded-full
+    [&::-moz-range-thumb]:transition-all
+    [&::-moz-range-thumb]:duration-150
+    [&::-moz-range-thumb]:ease-in-out
+    
+    [&::-webkit-slider-runnable-track]:w-full
+    [&::-webkit-slider-runnable-track]:h-2
+    [&::-webkit-slider-runnable-track]:bg-gray-100
+    [&::-webkit-slider-runnable-track]:rounded-full
+    [&::-webkit-slider-runnable-track]:dark:bg-gray-700
+    
+    [&::-moz-range-track]:w-full
+    [&::-moz-range-track]:h-2
+    [&::-moz-range-track]:bg-gray-100
+    [&::-moz-range-track]:rounded-full;
+}
+
+.timeContainer {
+  @apply flex justify-between mt-2 text-gray-400;
+}
+.playBtn {
+  @apply p-5 m-3 rounded-full;
+}
+.audioContainer {
+  @apply w-full p-5 text-center;
+}
+.songContainer {
+  @apply text-center mt-3 md:mt-4;
+}
+.songTitle {
+  @apply text-xl md:text-2xl font-semibold;
+}
+.thumbNail {
+  @apply w-full md:w-48 h-auto rounded-3xl object-cover shadow-lg;
+}
+.playerMain{
+  @apply w-full md:flex md:justify-center md:items-center
+}
+.metaContainer{
+  @apply relative flex flex-col items-center
+}
+.hero-container{
+@apply flex justify-center items-center flex-col w-full mt-10
+}
+.hero-element{
+  @apply flex flex-col justify-center items-center p-5 w-[95%] md:w-[85%] 2xl:w-[1440px]
+}
+.input-container{
+  @apply w-[80%] max-w-sm mx-auto mt-6 bg-transparent border rounded-xl focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C] xl:max-w-md
+}
+.input-entry{
+  @apply flex-1 h-10 px-4 py-2 m-1 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0
+}
+.song-container{
+  @apply flex flex-col md:flex-row justify-center backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md my-8 m-3 md:m-10
+}
+.thumbofHero2{
+  @apply w-[30%] md:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105
+}
+.thumbofHero1{
+  @apply w-auto md:w-[35%] object-cover transition-transform transform group-hover:scale-105
+}
+.notify-container{
+  @apply fixed bottom-10 flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3 z-30 shadow-xl rounded-lg 
 }

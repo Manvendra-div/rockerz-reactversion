@@ -126,10 +126,10 @@ const Hero = ({ setTrack }) => {
     );
   };
   return (
-    <div className="flex justify-center items-center flex-col w-full mt-10">
+    <div className="hero-container">
       {isNotify && (
         <div
-          className="fixed bottom-10 flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3 z-30 shadow-xl rounded-lg "
+          className="notify-container"
           role="alert"
         >
           <svg
@@ -142,7 +142,7 @@ const Hero = ({ setTrack }) => {
           <p>this feature will be available soon</p>
         </div>
       )}
-      <div className="flex flex-col justify-center items-center p-5 w-[95%] md:w-[85%] 2xl:w-[1440px]">
+      <div className="hero-element">
         <TypeAnimation
           sequence={[
             " ",
@@ -158,13 +158,13 @@ const Hero = ({ setTrack }) => {
           speed={50}
           className="text-3xl md:text-5xl font-bold"
         />
-        <div className="w-[80%] max-w-sm mx-auto mt-6 bg-transparent border rounded-xl focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C] xl:max-w-md">
+        <div className="input-container">
           <div className="flex rounded text-white flex-col md:flex-row">
             <input
               type="text"
               id="usertext"
               name="username"
-              className="flex-1 h-10 px-4 py-2 m-1 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0"
+              className="input-entry"
               placeholder="enter the keyword"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -173,7 +173,7 @@ const Hero = ({ setTrack }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-center backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md my-8 m-3 md:m-10">
+      <div className="song-container">
         <div className="m-1 md:w-[80%]">
           {datafromSearchToggle ? (
             <span className="font-semibold">

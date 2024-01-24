@@ -85,7 +85,7 @@ const Player = ({ track }) => {
 
   return (
     <div
-      className={`rounded-lg backdrop-blur-lg bg-zinc-800/60 md:flex md:flex-col md:items-center md:justify-center ${
+      className={`playerSuperContainerConst ${
         isPlayerExpanded ? "py-20 md:h-screen" : "py-3"
       } px-5`}
     >
@@ -98,30 +98,30 @@ const Player = ({ track }) => {
           )}
         </button>
       </div>
-      <div className="w-full md:flex md:justify-center md:items-center  ">
-        <div className="relative flex flex-col items-center">
+      <div className="playerMain">
+        <div className="metaContainer">
           <img
             src={song.image[2].link}
             alt="Album Thumb"
-            className={`w-62 md:w-48 ${
+            className={`thumbNail ${
               isPlayerExpanded ? "" : "hidden"
-            } h-auto rounded-3xl object-cover shadow-lg`}
+            } `}
           />
-          <div className="text-center mt-3 md:mt-4">
-            <p className="text-xl md:text-2xl font-semibold text-white">
+          <div className="songContainer">
+            <p className="songTitle">
               {song.name}
             </p>
             <p className="text-gray-300">{song.primaryArtists}</p>
           </div>
         </div>
-        <div className="w-full p-5 text-center">
+        <div className="audioContainer">
           <audio
             ref={audioRef}
             src={song.downloadUrl[4].link}
             onTimeUpdate={handleTimeUpdate}
           />
           <button
-            className="text-white p-5 m-3 rounded-full"
+            className="playBtn"
             onClick={togglePlay}
           >
             {isPlaying ? <BiPause size={50} /> : <BiPlay size={50} />}
@@ -133,11 +133,11 @@ const Player = ({ track }) => {
             value={currentTime}
             step="0.01"
             onChange={handleProgressChange}
-            className="w-full h-3 rounded-lg bg-gray-300 overflow-hidden focus:outline-none focus:bg-gray-400"
+            className="playerSlider"
           />
-          <div className="flex justify-between mt-2">
-            <span className="text-gray-400">{formatTime(currentTime)}</span>
-            <span className="text-gray-400">{formatTime(duration)}</span>
+          <div className="timeContainer">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration)}</span>
           </div>
         </div>
       </div>

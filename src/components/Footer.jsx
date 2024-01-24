@@ -1,7 +1,7 @@
 const Footer = () => {
     return (
-      <footer className="border-t bg-[#18191D] w-full absolute bg-opacity-75">
-        <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+      <footer className="footerDiv">
+        <div className="footerContainer">
           <a
             href="/"
             className="flex title-font font-medium items-center md:justify-start justify-center text-white"
@@ -11,7 +11,7 @@ const Footer = () => {
           <p className="text-sm text-gray-300 sm:ml-6 sm:mt-0 mt-4">
             © 2023 Rockerz WEB — Manvendra Singh
           </p>
-          <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+          <span className="flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
             <a
               href="https://twitter.com/Manvend03124391"
               className="ml-3 text-gray-400 hover:text-white"
