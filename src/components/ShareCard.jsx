@@ -45,7 +45,7 @@ Discover music like never before with Rockerz WEB! 🚀 Your go-to search engine
   };
   return (
     <>
-      <div className="fixed z-40 h-screen w-screen flex justify-center items-center bg-gray-800 bg-opacity-30">
+      <div className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40">
         <div className="w-[90%] md:w-[50%] bg-[#3a3a3b] rounded-xl p-3 border border-gray-300 shadow-2xl flex flex-col justify-center items-center">
           <div className="flex justify-between w-full">
             <span className="font-semibold text-sm md:text-lg m-3">
