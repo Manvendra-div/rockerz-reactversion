@@ -12,7 +12,7 @@ const fetchData = async (URL) => {
   }
 };
 
-const Player = ({ track }) => {
+const Player = ({ track, loadinFunc }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
