@@ -12,7 +12,7 @@ const fetchData = async (URL) => {
   }
 };
 
-const Player = ({ track, loadinFunc }) => {
+const Player = ({ track }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -86,7 +86,7 @@ const Player = ({ track, loadinFunc }) => {
   return (
     <div
       className={`playerSuperContainerConst ${
-        isPlayerExpanded ? "py-20 md:h-screen" : "py-3"
+        isPlayerExpanded ? "py-20 h-screen" : "py-3"
       } px-5`}
     >
       <div className="w-full text-white text-end">
@@ -98,32 +98,35 @@ const Player = ({ track, loadinFunc }) => {
           )}
         </button>
       </div>
-      <div className="playerMain">
+      <div
+        className={`w-full flex ${
+          isPlayerExpanded ? "flex-col md:flex-row" : ""
+        } md:justify-between items-center`}
+      >
         <div className="metaContainer">
           <img
             src={song.image[2].link}
             alt="Album Thumb"
-            className={`thumbNail ${
-              isPlayerExpanded ? "" : "hidden"
-            } `}
+            className={`thumbNail ${isPlayerExpanded ? "" : "hidden"} `}
           />
           <div className="songContainer">
-            <p className="songTitle">
-              {song.name}
+            <p className="songTitle">{song.name}</p>
+            <p className="text-gray-300 text-sm md:text-base">
+              {song.primaryArtists}
             </p>
-            <p className="text-gray-300">{song.primaryArtists}</p>
           </div>
         </div>
-        <div className="audioContainer">
+        <div
+          className={`audioContainer ${
+            isPlayerExpanded ? "w-full md:w-[80%]" : "md:w-[85%]"
+          }`}
+        >
           <audio
             ref={audioRef}
             src={song.downloadUrl[4].link}
             onTimeUpdate={handleTimeUpdate}
           />
-          <button
-            className="playBtn"
-            onClick={togglePlay}
-          >
+          <button className="playBtn" onClick={togglePlay}>
             {isPlaying ? <BiPause size={50} /> : <BiPlay size={50} />}
           </button>
           <input

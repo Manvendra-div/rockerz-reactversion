@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CiPlay1 } from "react-icons/ci";
+import { Transition } from "@headlessui/react";
 import { NumericFormat } from "react-number-format";
 
 const fetchData = async (URL) => {
@@ -18,11 +19,14 @@ const Hero = ({
   loadinFunc,
   toggleNotification,
   addNotifyContent,
+  showPlayer
 }) => {
   const [songSectionData, setSongSectionData] = useState(null);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
+  const [showInputField, setshowInputField] = useState(false);
+  const [appearSongCard,setappearSongCard] = useState(false);
   const fetchSearchData = async (e) => {
     finalSearchQueryFunc();
     loadinFunc(true);
@@ -35,6 +39,8 @@ const Hero = ({
       setSongSectionData(searchedata);
       loadinFunc(false);
     }, 200);
+    setappearSongCard(!appearSongCard)
+    setTimeout(() => setappearSongCard(true), 400);
   };
   const pushNotificationForLike = () => {
     toggleNotification(true);
@@ -56,6 +62,8 @@ const Hero = ({
   useEffect(() => {
     if (!datafromSearchToggle) {
       fetchHomePage();
+      setTimeout(() => setshowInputField(true), 100);
+      setTimeout(() => setappearSongCard(true), 400);
     }
   }, []);
   const throwSearchRequest = (e) => {
@@ -68,7 +76,9 @@ const Hero = ({
     setfinalSearchQuery(searchQuery);
   };
   const launchPlayer = (data) => {
-    setTrack(data);
+    showPlayer(false);
+    setTimeout(() => {setTrack(data)
+      showPlayer(true)},200)
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
   const SongCard = ({ data, index }) => {
@@ -156,23 +166,43 @@ const Hero = ({
           speed={50}
           className="text-3xl md:text-5xl font-bold"
         />
-        <div className="input-container">
-          <div className="flex rounded text-white flex-col md:flex-row">
-            <input
-              type="text"
-              id="usertext"
-              name="username"
-              className="input-entry"
-              placeholder="enter the keyword"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={throwSearchRequest}
-            />
+        <Transition
+          show={showInputField}
+          className="w-full"
+          enter="transition-all ease-in-out duration-500 delay-[200ms]"
+          enterFrom="opacity-0 translate-y-6"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-all ease-in-out duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="input-container">
+            <div className="flex rounded text-white flex-col md:flex-row">
+              <input
+                type="text"
+                id="usertext"
+                name="username"
+                className="input-entry"
+                placeholder="enter the keyword"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={throwSearchRequest}
+              />
+            </div>
           </div>
-        </div>
+        </Transition>
       </div>
       <div className="song-container">
-        <div className="m-1 md:w-[80%]">
+        <Transition
+          show={appearSongCard}
+          className="m-1 md:w-[80%]"
+          enter="transition-all ease-in-out duration-500 delay-[200ms]"
+          enterFrom="opacity-0 translate-y-6"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-all ease-in-out duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           {datafromSearchToggle ? (
             <span className="font-semibold">
               Top matches for {finalSearchQuery}
@@ -251,8 +281,17 @@ const Hero = ({
               </div>
             </div>
           )}
-        </div>
-        <div className="m-1">
+        </Transition>
+        <Transition
+          show={appearSongCard}
+          className="m-1"
+          enter="transition-all ease-in-out duration-500 delay-[200ms]"
+          enterFrom="opacity-0 translate-y-6"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-all ease-in-out duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           {datafromSearchToggle ? (
             <span className="font-semibold">related songs</span>
           ) : (
@@ -261,7 +300,7 @@ const Hero = ({
           {songSectionData?.slice(1, 4).map((song, index) => (
             <SongCard data={song} key={index} index={index} />
           ))}
-        </div>
+        </Transition>
       </div>
     </div>
   );

@@ -1,18 +1,18 @@
 import Brand from "../assets/Brand.svg";
 import { MdOutlineShare } from "react-icons/md";
 import ShareCard from "./ShareCard";
-import { useState } from "react";
+import { Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 const NavBar = ({ toggleNotification, addNotifyContent }) => {
   const [shareCardtoggle, setshareCardtoggle] = useState(false);
   return (
     <>
-      {shareCardtoggle && (
-        <ShareCard
-          toggleFunc={setshareCardtoggle}
-          pushNoti={toggleNotification}
-          addContentNoti={addNotifyContent}
-        />
-      )}
+      <ShareCard
+        toggleFunc={setshareCardtoggle}
+        cardState={shareCardtoggle}
+        pushNoti={toggleNotification}
+        addContentNoti={addNotifyContent}
+      />
       <div className="navHeader">
         <div className="navResponsive">
           <div className="">
