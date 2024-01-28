@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { Transition } from "@headlessui/react";
 
 const fetchData = async (URL) => {
   try {
@@ -101,14 +102,25 @@ const Player = ({ track }) => {
       <div
         className={`w-full flex ${
           isPlayerExpanded ? "flex-col md:flex-row" : ""
-        } md:justify-between items-center`}
+        } justify-between items-center`}
       >
         <div className="metaContainer">
-          <img
-            src={song.image[2].link}
-            alt="Album Thumb"
-            className={`thumbNail ${isPlayerExpanded ? "" : "hidden"} `}
-          />
+          <Transition
+            show={isPlayerExpanded}
+            className="p-2"
+            enter="transition-all ease-in-out duration-500 delay-[100ms]"
+            enterFrom="opacity-0 translate-y-6"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition-all ease-in-out duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <img
+              src={song.image[2].link}
+              alt="Album Thumb"
+              className={`thumbNail ${isPlayerExpanded ? "" : "hidden"} `}
+            />
+          </Transition>
           <div className="songContainer">
             <p className="songTitle">{song.name}</p>
             <p className="text-gray-300 text-sm md:text-base">
@@ -118,7 +130,7 @@ const Player = ({ track }) => {
         </div>
         <div
           className={`audioContainer ${
-            isPlayerExpanded ? "w-full md:w-[80%]" : "md:w-[85%]"
+            isPlayerExpanded ? "w-[90%] md:w-[80%]" : "md:w-[85%]"
           }`}
         >
           <audio
