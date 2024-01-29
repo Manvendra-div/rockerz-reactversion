@@ -101,10 +101,10 @@ const Player = ({ track }) => {
       </div>
       <div
         className={`w-full flex ${
-          isPlayerExpanded ? "flex-col md:flex-row" : ""
+          isPlayerExpanded ? "flex-col lg:flex-row" : ""
         } justify-between items-center`}
       >
-        <div className="metaContainer">
+        <div className={`metaContainer ${isPlayerExpanded ? "w-[90%] lg:w-[20%]" : "w-[45%] lg:w-[20%]"}`}>
           <Transition
             show={isPlayerExpanded}
             className="p-2"
@@ -118,11 +118,11 @@ const Player = ({ track }) => {
             <img
               src={song.image[2].link}
               alt="Album Thumb"
-              className={`thumbNail ${isPlayerExpanded ? "" : "hidden"} `}
+              className={`thumbNail`}
             />
           </Transition>
-          <div className="songContainer">
-            <p className={`songTitle ${song.name?.length>20 ? "hover:animate-marquee": ""} overflow-x-hidden whitespace-nowrap`}>{song.name}</p>
+          <div className={`songContainer overflow-x-hidden w-full`}>
+            <p className={`songTitle ${(song.name?.length>20 ? "hover:animate-marquee whitespace-nowrap": "")}`}>{song.name}</p>
             <p className="text-gray-300 text-sm md:text-base">
               {song.primaryArtists}
             </p>
@@ -130,7 +130,7 @@ const Player = ({ track }) => {
         </div>
         <div
           className={`audioContainer ${
-            isPlayerExpanded ? "w-[90%] md:w-[80%]" : "md:w-[85%]"
+            isPlayerExpanded ? "w-[90%] lg:w-[80%]" : "lg:w-[85%]"
           }`}
         >
           <audio

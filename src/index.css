@@ -16,7 +16,7 @@ body {
   @apply flex justify-between items-center w-[95%] lg:w-[85%] 2xl:w-[1440px];
 }
 .shareBtn {
-  @apply mx-3 backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md p-2 rounded-md w-[15%] md:w-[5%] text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];
+  @apply mx-3 backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md p-2 rounded-md w-[15%] lg:w-[5%] text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];
 }
 .footerDiv {
   @apply border-t bg-[#18191D] w-full absolute bg-opacity-75;
@@ -25,7 +25,7 @@ body {
   @apply container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col;
 }
 .playerSuperContainerConst {
-  @apply rounded-lg backdrop-blur-lg bg-zinc-800/60 md:flex md:flex-col md:items-center md:justify-center;
+  @apply rounded-lg backdrop-blur-lg bg-zinc-800/60 lg:flex lg:flex-col lg:items-center lg:justify-center;
 }
 .playerSlider {
   @apply w-full bg-transparent cursor-pointer appearance-none disabled:opacity-50 disabled:pointer-events-none focus:outline-none
@@ -77,22 +77,22 @@ body {
   @apply text-center lg:text-start mt-3 lg:mt-4;
 }
 .songTitle {
-  @apply text-xl md:text-2xl font-semibold;
+  @apply text-xl lg:text-2xl font-semibold;
 }
 .thumbNail {
-  @apply w-full md:w-48 h-auto rounded-3xl object-cover shadow-lg;
+  @apply w-full lg:w-48 h-auto rounded-3xl object-cover shadow-lg;
 }
 .playerMain {
-  @apply w-full flex flex-col md:flex-row md:justify-between items-center;
+  @apply w-full flex flex-col lg:flex-row lg:justify-between items-center;
 }
 .metaContainer {
-  @apply flex flex-col items-center;
+  @apply flex flex-col items-stretch;
 }
 .hero-container {
   @apply flex justify-center items-center flex-col w-full mt-10;
 }
 .hero-element {
-  @apply flex flex-col justify-center items-center p-5 w-[95%] md:w-[85%] 2xl:w-[1440px];
+  @apply flex flex-col justify-center items-center p-5 w-[95%] lg:w-[85%] 2xl:w-[1440px];
 }
 .input-container {
   @apply w-[80%] max-w-sm mx-auto mt-6 bg-transparent border rounded-xl focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C] xl:max-w-md;
@@ -104,10 +104,10 @@ body {
   @apply flex flex-col lg:flex-row justify-center lg:justify-between backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md w-[90%] 2xl:w-[1000px] my-8;
 }
 .thumbofHero2 {
-  @apply w-[30%] md:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105;
+  @apply w-[30%] lg:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105;
 }
 .thumbofHero1 {
-  @apply w-auto md:w-[35%] object-cover transition-transform transform group-hover:scale-105;
+  @apply w-auto lg:w-[35%] object-cover transition-transform transform group-hover:scale-105;
 }
 .notify-container {
   @apply fixed bottom-10 flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3 z-50 shadow-xl rounded-lg;
