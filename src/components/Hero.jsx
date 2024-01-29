@@ -87,11 +87,11 @@ const Hero = ({
         <img
           src={data.image[2].link}
           key={index}
-          className="w-[30%] md:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105"
+          className="w-[30%] lg:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
         />
-        <div className="p-3">
-          <h3 className="text-lg font-semibold mb-1">{data.name}</h3>
+        <div className="p-3 overflow-x-hidden whitespace-nowrap">
+          <h3 className={`text-lg font-semibold mb-1 ${data?.name.length>20 ? "group-hover:animate-marquee": ""}`}>{data.name}</h3>
           <p className="text-sm">
             {typeof data.primaryArtists === "string"
               ? data.primaryArtists
@@ -164,7 +164,7 @@ const Hero = ({
           ]}
           wrapper="span"
           speed={50}
-          className="text-3xl md:text-5xl font-bold"
+          className="text-3xl lg:text-5xl font-bold"
         />
         <Transition
           show={showInputField}
@@ -177,7 +177,7 @@ const Hero = ({
           leaveTo="opacity-0"
         >
           <div className="input-container">
-            <div className="flex rounded text-white flex-col md:flex-row">
+            <div className="flex rounded text-white flex-col lg:flex-row">
               <input
                 type="text"
                 id="usertext"
@@ -195,7 +195,7 @@ const Hero = ({
       <div className="song-container">
         <Transition
           show={appearSongCard}
-          className="m-1 md:w-[80%]"
+          className="m-1 lg:w-[50%]"
           enter="transition-all ease-in-out duration-500 delay-[200ms]"
           enterFrom="opacity-0 translate-y-6"
           enterTo="opacity-100 translate-y-0"
@@ -212,15 +212,15 @@ const Hero = ({
           )}
 
           {songSectionData && (
-            <div className="relative flex flex-col md:flex-row justify-start items-center md:items-start bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400">
+            <div className="relative flex flex-col lg:flex-row justify-start items-center lg:items-start bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400">
               <img
                 src={songSectionData[0]?.image[2].link}
-                className="w-auto md:w-[35%] object-cover transition-transform transform group-hover:scale-105"
+                className="w-auto lg:w-[35%] object-cover transition-transform transform group-hover:scale-105"
                 alt="Song Image"
               />
-              <div className="md:ml-5 mt-1 lg:mt-8 p-2">
-                <h3 className="text-2xl font-semibold mb-2 leading-tight overflow-hidden">
-                  {songSectionData[0]?.name}
+              <div className="lg:ml-5 mt-1 lg:mt-8 p-2">
+                <h3 className={`text-2xl font-semibold mb-2 leading-tight ${songSectionData[0]?.name.length>20 ? "group-hover:animate-marquee": ""} overflow-x-hidden whitespace-nowrap`}>
+                  {songSectionData[0]?.name} 
                 </h3>
                 <p className="text-sm leading-relaxed">
                   {typeof songSectionData[0]?.primaryArtists === "string"
@@ -284,7 +284,7 @@ const Hero = ({
         </Transition>
         <Transition
           show={appearSongCard}
-          className="m-1"
+          className="m-1 lg:w-[50%]"
           enter="transition-all ease-in-out duration-500 delay-[200ms]"
           enterFrom="opacity-0 translate-y-6"
           enterTo="opacity-100 translate-y-0"

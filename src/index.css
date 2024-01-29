@@ -13,7 +13,7 @@ body {
   @apply sticky top-0 flex justify-center items-center backdrop-blur-lg bg-white/10 px-5 py-3 rounded-b-lg shadow-lg w-full z-20;
 }
 .navResponsive {
-  @apply flex justify-between items-center w-[95%] md:w-[85%] 2xl:w-[1440px];
+  @apply flex justify-between items-center w-[95%] lg:w-[85%] 2xl:w-[1440px];
 }
 .shareBtn {
   @apply mx-3 backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md p-2 rounded-md w-[15%] md:w-[5%] text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];
@@ -74,10 +74,10 @@ body {
   @apply  p-1 text-center;
 }
 .songContainer {
-  @apply text-center mt-3 md:mt-4;
+  @apply text-center lg:text-start mt-3 lg:mt-4;
 }
 .songTitle {
-  @apply text-lg md:text-2xl font-semibold;
+  @apply text-xl md:text-2xl font-semibold;
 }
 .thumbNail {
   @apply w-full md:w-48 h-auto rounded-3xl object-cover shadow-lg;
@@ -101,7 +101,7 @@ body {
   @apply flex-1 h-10 px-4 py-2 m-1 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0;
 }
 .song-container {
-  @apply flex flex-col md:flex-row justify-center backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md my-8 m-3 md:m-10;
+  @apply flex flex-col lg:flex-row justify-center lg:justify-between backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md w-[90%] 2xl:w-[1000px] my-8;
 }
 .thumbofHero2 {
   @apply w-[30%] md:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105;

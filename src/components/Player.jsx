@@ -122,7 +122,7 @@ const Player = ({ track }) => {
             />
           </Transition>
           <div className="songContainer">
-            <p className="songTitle">{song.name}</p>
+            <p className={`songTitle ${song.name?.length>20 ? "hover:animate-marquee": ""} overflow-x-hidden whitespace-nowrap`}>{song.name}</p>
             <p className="text-gray-300 text-sm md:text-base">
               {song.primaryArtists}
             </p>
