@@ -74,7 +74,7 @@ body {
   @apply  p-1 text-center;
 }
 .songContainer {
-  @apply text-center lg:text-start mt-3 lg:mt-4;
+  @apply mt-3 lg:mt-4;
 }
 .songTitle {
   @apply text-xl lg:text-2xl font-semibold;
@@ -85,9 +85,7 @@ body {
 .playerMain {
   @apply w-full flex flex-col lg:flex-row lg:justify-between items-center;
 }
-.metaContainer {
-  @apply flex flex-col items-stretch;
-}
+
 .hero-container {
   @apply flex justify-center items-center flex-col w-full mt-10;
 }

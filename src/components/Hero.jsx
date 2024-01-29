@@ -19,14 +19,14 @@ const Hero = ({
   loadinFunc,
   toggleNotification,
   addNotifyContent,
-  showPlayer
+  showPlayer,
 }) => {
   const [songSectionData, setSongSectionData] = useState(null);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
   const [showInputField, setshowInputField] = useState(false);
-  const [appearSongCard,setappearSongCard] = useState(false);
+  const [appearSongCard, setappearSongCard] = useState(false);
   const fetchSearchData = async (e) => {
     finalSearchQueryFunc();
     loadinFunc(true);
@@ -39,7 +39,7 @@ const Hero = ({
       setSongSectionData(searchedata);
       loadinFunc(false);
     }, 200);
-    setappearSongCard(!appearSongCard)
+    setappearSongCard(!appearSongCard);
     setTimeout(() => setappearSongCard(true), 400);
   };
   const pushNotificationForLike = () => {
@@ -77,8 +77,10 @@ const Hero = ({
   };
   const launchPlayer = (data) => {
     showPlayer(false);
-    setTimeout(() => {setTrack(data)
-      showPlayer(true)},200)
+    setTimeout(() => {
+      setTrack(data);
+      showPlayer(true);
+    }, 200);
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
   const SongCard = ({ data, index }) => {
@@ -91,7 +93,13 @@ const Hero = ({
           alt="Song Image"
         />
         <div className="p-3 overflow-x-hidden whitespace-nowrap">
-          <h3 className={`text-lg font-semibold mb-1 ${data?.name.length>20 ? "group-hover:animate-marquee": ""}`}>{data.name}</h3>
+          <h3
+            className={`text-lg font-semibold mb-1 ${
+              data?.name.length > 20 ? "group-hover:animate-marquee" : ""
+            }`}
+          >
+            {data.name}
+          </h3>
           <p className="text-sm">
             {typeof data.primaryArtists === "string"
               ? data.primaryArtists
@@ -218,9 +226,15 @@ const Hero = ({
                 className="w-auto lg:w-[35%] object-cover transition-transform transform group-hover:scale-105"
                 alt="Song Image"
               />
-              <div className="lg:ml-5 mt-1 lg:mt-8 p-2">
-                <h3 className={`text-2xl font-semibold mb-2 leading-tight ${songSectionData[0]?.name.length>20 ? "group-hover:animate-marquee": ""} overflow-x-hidden whitespace-nowrap`}>
-                  {songSectionData[0]?.name} 
+              <div className="lg:ml-5 mt-1 lg:mt-8 p-2 overflow-x-hidden whitespace-nowrap">
+                <h3
+                  className={`text-2xl font-semibold mb-2 leading-tight ${
+                    songSectionData[0]?.name.length > 20
+                      ? "group-hover:animate-marquee"
+                      : ""
+                  }`}
+                >
+                  {songSectionData[0]?.name}
                 </h3>
                 <p className="text-sm leading-relaxed">
                   {typeof songSectionData[0]?.primaryArtists === "string"
