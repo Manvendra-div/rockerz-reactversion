@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CiPlay1 } from "react-icons/ci";
-import { Transition } from "@headlessui/react";
+import { Transition, Combobox } from "@headlessui/react";
 import { NumericFormat } from "react-number-format";
 
 const fetchData = async (URL) => {
@@ -22,6 +22,7 @@ const Hero = ({
   showPlayer,
 }) => {
   const [songSectionData, setSongSectionData] = useState(null);
+  const [recommendation, setRecommendation] = useState([]);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
@@ -40,6 +41,7 @@ const Hero = ({
       loadinFunc(false);
     }, 200);
     setappearSongCard(!appearSongCard);
+
     setTimeout(() => setappearSongCard(true), 400);
   };
   const pushNotificationForLike = () => {
@@ -72,7 +74,13 @@ const Hero = ({
       fetchSearchData(searchQuery.replace(/ /g, "+"));
     }
   };
+  const throwSearchRequestfromOptions = (recommendedsongName) => {
+    setdatafromSearchToggle(true);
+    fetchSearchData(recommendedsongName.replace(/ /g, "+"));
+    setfinalSearchQuery(recommendedsongName);
+  };
   const finalSearchQueryFunc = () => {
+    console.log("search query from finalSearchQueryFunc", searchQuery);
     setfinalSearchQuery(searchQuery);
   };
   const launchPlayer = (data) => {
@@ -156,6 +164,22 @@ const Hero = ({
       </div>
     );
   };
+  const getRecommendations = async (keyword) => {
+    if (keyword.length > 2) {
+      const recom = await fetchData(
+        `https://saavn.me/search/songs?query=${keyword.replace(
+          / /g,
+          "+"
+        )}&page=1&limit=4`
+      );
+      setRecommendation(recom.data.results);
+    } else if (keyword === "") {
+      setRecommendation([]);
+    } else {
+      setRecommendation([]);
+    }
+  };
+
   return (
     <div className="hero-container">
       <div className="hero-element">
@@ -184,20 +208,66 @@ const Hero = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="input-container">
-            <div className="flex rounded text-white flex-col lg:flex-row">
-              <input
-                type="text"
-                id="usertext"
-                name="username"
-                className="input-entry"
-                placeholder="enter the keyword"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={throwSearchRequest}
-              />
+          <Combobox
+            value={searchQuery}
+            onChange={() => {
+              finalSearchQueryFunc;
+            }}
+          >
+            <div className="relative flex flex-col justify-center items-center w-full">
+              <div className="input-container">
+                <Combobox.Input
+                  className={"input-entry"}
+                  placeholder="enter the keyword"
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    getRecommendations(e.target.value);
+                  }}
+                  onKeyDown={throwSearchRequest}
+                />
+              </div>
+              <Combobox.Options
+                className={
+                  "absolute top-[110%] z-30 backdrop-blur-xl bg-white/30 rounded-md w-[80%] max-w-sm xl:max-w-md "
+                }
+              >
+                {recommendation.map((recommend, index) => (
+                  <Combobox.Option
+                    className="hover:backdrop-blur-sm hover:bg-black/50 text-white p-1 cursor-pointer overflow-x-hidden rounded-md whitespace-nowrap flex items-center"
+                    onClick={() =>
+                      throwSearchRequestfromOptions(
+                        recommend.name +
+                          " " +
+                          (typeof recommend.primaryArtists === "string"
+                            ? recommend.primaryArtists
+                            : recommend.primaryArtists
+                                .map((name) => name.name)
+                                .join(", "))
+                      )
+                    }
+                    key={index}
+                  >
+                    <p
+                      className={`${
+                        recommend.name.length > 20
+                          ? "hover:animate-marquee"
+                          : ""
+                      }`}
+                    >
+                      {recommend.name} |{" "}
+                      <span className="text-xs">
+                        {typeof recommend.primaryArtists === "string"
+                          ? recommend.primaryArtists
+                          : recommend.primaryArtists
+                              .map((name) => name.name)
+                              .join(", ")}
+                      </span>
+                    </p>
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
             </div>
-          </div>
+          </Combobox>
         </Transition>
       </div>
       <div className="song-container">
@@ -307,7 +377,9 @@ const Hero = ({
           leaveTo="opacity-0"
         >
           {datafromSearchToggle ? (
-            <span className="font-semibold">related songs</span>
+            songSectionData.length < 2 ? null : (
+              <span className="font-semibold">related songs</span>
+            )
           ) : (
             <span className="font-semibold">Songs</span>
           )}
