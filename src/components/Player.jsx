@@ -107,7 +107,7 @@ const Player = ({ track }) => {
         <div className={`${isPlayerExpanded ? "w-[90%] lg:w-[20%] self-center" : "w-[45%] lg:w-[20%]"}`}>
           <Transition
             show={isPlayerExpanded}
-            className="p-2"
+            className="p-2 flex justify-center"
             enter="transition-all ease-in-out duration-500 delay-[100ms]"
             enterFrom="opacity-0 translate-y-6"
             enterTo="opacity-100 translate-y-0"
@@ -118,7 +118,7 @@ const Player = ({ track }) => {
             <img
               src={song.image[2].link}
               alt="Album Thumb"
-              className={`thumbNail`}
+              className={`thumbNail self-center`}
             />
           </Transition>
           <div className={`songContainer overflow-x-hidden w-full ${isPlayerExpanded? "text-center": "text-start"}`}>
