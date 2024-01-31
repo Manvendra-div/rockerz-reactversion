@@ -91,6 +91,13 @@ const Hero = ({
     }, 200);
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
+  function debounce(func, timeout = 500){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
   const SongCard = ({ data, index }) => {
     return (
       <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5  border border-gray-400">
@@ -221,7 +228,7 @@ const Hero = ({
                   placeholder="enter the keyword"
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    getRecommendations(e.target.value);
+                    debounce(getRecommendations(e.target.value))
                   }}
                   onKeyDown={throwSearchRequest}
                 />
