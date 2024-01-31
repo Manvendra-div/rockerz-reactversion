@@ -122,7 +122,7 @@ const Player = ({ track }) => {
             />
           </Transition>
           <div className={`songContainer overflow-x-hidden w-full ${isPlayerExpanded? "text-center": "text-start"}`}>
-            <p className={`songTitle ${(song.name?.length>20 ? "hover:animate-marquee whitespace-nowrap": "")}`}>{song.name}</p>
+            <p className={`songTitle ${(song.name?.length>20 ? "hover:animate-marquee whitespace-nowrap": "")}`} dangerouslySetInnerHTML={{__html: song.name}}/>
             <p className="text-gray-300 text-sm md:text-base">
               {song.primaryArtists}
             </p>
