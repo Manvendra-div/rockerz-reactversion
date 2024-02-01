@@ -5,6 +5,8 @@ import { CiPlay1 } from "react-icons/ci";
 import { Transition, Combobox } from "@headlessui/react";
 import { NumericFormat } from "react-number-format";
 
+const BASE_API = "https://saavn-api-sigma.vercel.app";
+
 const fetchData = async (URL) => {
   try {
     const response = await axios.get(URL);
@@ -29,20 +31,21 @@ const Hero = ({
   const [showInputField, setshowInputField] = useState(false);
   const [appearSongCard, setappearSongCard] = useState(false);
   const fetchSearchData = async (e) => {
+    setappearSongCard(false);
+    setdatafromSearchToggle(true);
     finalSearchQueryFunc();
     loadinFunc(true);
     setTimeout(async () => {
+      setSongSectionData([]);
       const searchedata = (
-        await fetchData(
-          `https://saavn.me/search/songs?query=${e}&page=1&limit=5`
-        )
+        await fetchData(`${BASE_API}/search/songs?query=${e}&page=1&limit=5`)
       ).data.results;
       setSongSectionData(searchedata);
       loadinFunc(false);
-    }, 200);
-    setappearSongCard(!appearSongCard);
-
-    setTimeout(() => setappearSongCard(true), 400);
+    }, 100);
+    setTimeout(() => {
+      setappearSongCard(true);
+    }, 400);
   };
   const pushNotificationForLike = () => {
     toggleNotification(true);
@@ -55,7 +58,7 @@ const Hero = ({
     loadinFunc(true);
     setTimeout(async () => {
       const homepagedata = (
-        await fetchData("https://saavn.me/modules?language=english")
+        await fetchData(`${BASE_API}/modules?language=english`)
       ).data.trending.songs;
       setSongSectionData(homepagedata);
       loadinFunc(false);
@@ -70,17 +73,14 @@ const Hero = ({
   }, []);
   const throwSearchRequest = (e) => {
     if (e.key === "Enter") {
-      setdatafromSearchToggle(true);
       fetchSearchData(searchQuery.replace(/ /g, "+"));
     }
   };
   const throwSearchRequestfromOptions = (recommendedsongName) => {
-    setdatafromSearchToggle(true);
     fetchSearchData(recommendedsongName.replace(/ /g, "+"));
     setfinalSearchQuery(recommendedsongName);
   };
   const finalSearchQueryFunc = () => {
-    console.log("search query from finalSearchQueryFunc", searchQuery);
     setfinalSearchQuery(searchQuery);
   };
   const launchPlayer = (data) => {
@@ -91,11 +91,13 @@ const Hero = ({
     }, 200);
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
-  function debounce(func, timeout = 500){
+  function debounce(func, timeout = 400) {
     let timer;
     return (...args) => {
       clearTimeout(timer);
-      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
     };
   }
   const SongCard = ({ data, index }) => {
@@ -174,7 +176,7 @@ const Hero = ({
   const getRecommendations = async (keyword) => {
     if (keyword.length > 2) {
       const recom = await fetchData(
-        `https://saavn.me/search/songs?query=${keyword.replace(
+        `${BASE_API}/search/songs?query=${keyword.replace(
           / /g,
           "+"
         )}&page=1&limit=4`
@@ -228,7 +230,7 @@ const Hero = ({
                   placeholder="enter the keyword"
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    debounce(getRecommendations(e.target.value))
+                    debounce(getRecommendations(e.target.value));
                   }}
                   onKeyDown={throwSearchRequest}
                 />
@@ -278,6 +280,7 @@ const Hero = ({
         </Transition>
       </div>
       <div className="song-container">
+        {!appearSongCard && <div className="h-screen"></div>}
         <Transition
           show={appearSongCard}
           className="m-1 lg:w-[50%]"
