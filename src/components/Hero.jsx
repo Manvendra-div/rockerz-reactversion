@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CiPlay1 } from "react-icons/ci";
 import { Transition, Combobox } from "@headlessui/react";
+import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
 
 const BASE_API = "https://saavn-api-sigma.vercel.app";
@@ -23,7 +24,7 @@ const Hero = ({
   addNotifyContent,
   showPlayer,
 }) => {
-  const [songSectionData, setSongSectionData] = useState(null);
+  const [songSectionData, setSongSectionData] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,9 +33,9 @@ const Hero = ({
   const [appearSongCard, setappearSongCard] = useState(false);
   const fetchSearchData = async (e) => {
     setappearSongCard(false);
-    setdatafromSearchToggle(true);
     finalSearchQueryFunc();
     loadinFunc(true);
+    setdatafromSearchToggle(true);
     setTimeout(async () => {
       setSongSectionData([]);
       const searchedata = (
@@ -42,10 +43,10 @@ const Hero = ({
       ).data.results;
       setSongSectionData(searchedata);
       loadinFunc(false);
+      setTimeout(() => {
+        setappearSongCard(true);
+      }, 150);
     }, 100);
-    setTimeout(() => {
-      setappearSongCard(true);
-    }, 400);
   };
   const pushNotificationForLike = () => {
     toggleNotification(true);
@@ -56,6 +57,7 @@ const Hero = ({
   };
   const fetchHomePage = async () => {
     loadinFunc(true);
+    setdatafromSearchToggle(false);
     setTimeout(async () => {
       const homepagedata = (
         await fetchData(`${BASE_API}/modules?language=english`)
@@ -115,7 +117,7 @@ const Hero = ({
               data?.name.length > 20 ? "group-hover:animate-marquee" : ""
             }`}
           >
-            {data.name}
+            {`${parse(data.name)}`}
           </h3>
           <p className="text-sm">
             {typeof data.primaryArtists === "string"
@@ -244,15 +246,16 @@ const Hero = ({
                   <Combobox.Option
                     className="hover:backdrop-blur-sm hover:bg-black/50 text-white p-1 cursor-pointer overflow-x-hidden rounded-md whitespace-nowrap flex items-center"
                     onClick={() =>
-                      throwSearchRequestfromOptions(
-                        recommend.name +
-                          " " +
-                          (typeof recommend.primaryArtists === "string"
-                            ? recommend.primaryArtists
-                            : recommend.primaryArtists
-                                .map((name) => name.name)
-                                .join(", "))
-                      )
+                      throwSearchRequestfromOptions(`${
+                        parse(recommend.name) +
+                        " " +
+                        (typeof recommend.primaryArtists === "string"
+                          ? recommend.primaryArtists
+                          : recommend.primaryArtists
+                              .map((name) => name.name)
+                              .join(", "))
+                      }
+                      `)
                     }
                     key={index}
                   >
@@ -263,7 +266,7 @@ const Hero = ({
                           : ""
                       }`}
                     >
-                      {recommend.name} |{" "}
+                      {parse(recommend.name) + " | "}
                       <span className="text-xs">
                         {typeof recommend.primaryArtists === "string"
                           ? recommend.primaryArtists
@@ -299,7 +302,7 @@ const Hero = ({
             <span className="font-semibold">Top trending</span>
           )}
 
-          {songSectionData && (
+          {songSectionData.length > 0 && (
             <div className="relative flex flex-col lg:flex-row justify-start items-center lg:items-start bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400">
               <img
                 src={songSectionData[0]?.image[2].link}
@@ -314,7 +317,7 @@ const Hero = ({
                       : ""
                   }`}
                 >
-                  {songSectionData[0]?.name}
+                  {`${parse(songSectionData[0]?.name)}`}
                 </h3>
                 <p className="text-sm leading-relaxed">
                   {typeof songSectionData[0]?.primaryArtists === "string"
