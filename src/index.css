@@ -40,7 +40,7 @@ body {
     [&::-webkit-slider-thumb]:duration-150
     [&::-webkit-slider-thumb]:ease-in-out
     [&::-webkit-slider-thumb]:dark:bg-slate-700
-    
+
     [&::-moz-range-thumb]:w-2.5
     [&::-moz-range-thumb]:h-2.5
     [&::-moz-range-thumb]:appearance-none
@@ -51,13 +51,13 @@ body {
     [&::-moz-range-thumb]:transition-all
     [&::-moz-range-thumb]:duration-150
     [&::-moz-range-thumb]:ease-in-out
-    
+
     [&::-webkit-slider-runnable-track]:w-full
     [&::-webkit-slider-runnable-track]:h-2
     [&::-webkit-slider-runnable-track]:bg-gray-100
     [&::-webkit-slider-runnable-track]:rounded-full
     [&::-webkit-slider-runnable-track]:dark:bg-gray-700
-    
+
     [&::-moz-range-track]:w-full
     [&::-moz-range-track]:h-2
     [&::-moz-range-track]:bg-gray-100
@@ -71,13 +71,13 @@ body {
   @apply p-3 m-3 rounded-full;
 }
 .audioContainer {
-  @apply  p-1 text-center;
+  @apply p-1 text-center;
 }
-.songContainer {
+.songContainerPlayer {
   @apply mt-3 lg:mt-4;
 }
 .songTitle {
-  @apply text-xl lg:text-2xl font-semibold;
+  @apply text-xl lg:text-2xl font-semibold select-none;
 }
 .thumbNail {
   @apply w-full lg:w-48 h-auto rounded-3xl object-cover shadow-lg;
@@ -98,8 +98,11 @@ body {
 .input-entry {
   @apply w-full flex-1 h-10 px-4 py-2 m-1 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0;
 }
+.data-container {
+  @apply backdrop-blur-lg bg-white/10 p-3 lg:p-6 rounded-xl shadow-md w-[90%] 2xl:w-[1200px] my-8;
+}
 .song-container {
-  @apply flex flex-col lg:flex-row justify-center lg:justify-between backdrop-blur-lg bg-white/10 p-8 rounded-xl shadow-md w-[90%] 2xl:w-[1000px] my-8;
+  @apply flex flex-col lg:flex-row justify-center lg:justify-between;
 }
 .thumbofHero2 {
   @apply w-[30%] lg:w-[20%] h-auto object-cover transition-transform transform group-hover:scale-105;
