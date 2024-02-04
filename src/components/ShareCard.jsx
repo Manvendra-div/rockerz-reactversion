@@ -117,7 +117,7 @@ const ShareCard = ({
           />
         </div>
 
-        <div className="m-3 p-4 rounded-xl backdrop-blur-lg bg-white/10 w-[98%] xl:w-[95%] mx-3 border-[1px] border-black flex flex-wrap justify-between items-center">
+        <div className="m-3 p-4 rounded-xl backdrop-blur-sm bg-black/30 w-[98%] xl:w-[95%] mx-3 border-[1px] border-black flex flex-wrap justify-between items-center">
           {contentOfCard.content}
         </div>
         <span className="p-3 text-sm xl:text-xl">
