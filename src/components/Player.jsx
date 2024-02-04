@@ -4,6 +4,7 @@ import { BiPause, BiPlay } from "react-icons/bi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
 import Loading from "./LoadingAnimation"
+import BASE_API from "../BASE_API.js"
 
 const fetchData = async (URL) => {
   try {
@@ -24,7 +25,7 @@ const Player = ({ track }) => {
 
   const getTrackData = async (Trackid) => {
     try {
-      const trackData = await fetchData(`https://saavn.me/songs?id=${Trackid}`);
+      const trackData = await fetchData(`${BASE_API}/songs?id=${Trackid}`);
       const songData = trackData.data[0];
       if (songData) {
         setSong(songData);

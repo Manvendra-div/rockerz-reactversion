@@ -6,8 +6,7 @@ import { Transition, Combobox } from "@headlessui/react";
 import ShareCard from "./ShareCard";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
-
-const BASE_API = "https://saavn-api-sigma.vercel.app";
+import BASE_API from "../BASE_API.js"
 
 const fetchData = async (URL) => {
   try {

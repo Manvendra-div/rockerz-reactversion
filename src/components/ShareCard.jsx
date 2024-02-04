@@ -89,7 +89,7 @@ const ShareCard = ({
       leave="ease-in duration-200"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
-      className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0"
+      className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0 left-0"
     >
       <Transition.Child
         className="w-[90%] md:w-[50%] backdrop-blur-lg bg-white/10 rounded-xl p-3 border border-gray-300 shadow-2xl flex flex-col justify-center items-center"
