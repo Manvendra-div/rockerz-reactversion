@@ -72,7 +72,6 @@ const Hero = ({
       const homepagedata = (
         await fetchData(`${BASE_API}/modules?language=english`)
       ).data.trending;
-      console.log(homepagedata);
       setSongSectionData(homepagedata);
       loadinFunc(false);
     }, 100);
@@ -370,7 +369,6 @@ const Hero = ({
         </div>
         <div className="data-container">
           {!appearSongCard && <div className="h-screen"></div>}
-          {console.log(songSectionData)}
           <div className="song-container">
             <Transition
               show={appearSongCard}
