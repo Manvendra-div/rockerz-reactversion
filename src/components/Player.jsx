@@ -3,6 +3,8 @@ import axios from "axios";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
+import Loading from "./LoadingAnimation"
+import BASE_API from "../BASE_API.js"
 
 const fetchData = async (URL) => {
   try {
@@ -23,7 +25,7 @@ const Player = ({ track }) => {
 
   const getTrackData = async (Trackid) => {
     try {
-      const trackData = await fetchData(`https://saavn.me/songs?id=${Trackid}`);
+      const trackData = await fetchData(`${BASE_API}/songs?id=${Trackid}`);
       const songData = trackData.data[0];
       if (songData) {
         setSong(songData);
@@ -81,7 +83,7 @@ const Player = ({ track }) => {
     setIsPlayerExpanded(!isPlayerExpanded);
   };
   if (!song) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   return (
@@ -121,9 +123,9 @@ const Player = ({ track }) => {
               className={`thumbNail self-center`}
             />
           </Transition>
-          <div className={`songContainer overflow-x-hidden w-full ${isPlayerExpanded? "text-center": "text-start"}`}>
+          <div className={`songContainerPlayer overflow-x-hidden w-full ${isPlayerExpanded? "text-center": "text-start"}`}>
             <p className={`songTitle ${(song.name?.length>20 ? "hover:animate-marquee whitespace-nowrap": "")}`} dangerouslySetInnerHTML={{__html: song.name}}/>
-            <p className="text-gray-300 text-sm md:text-base">
+            <p className="text-gray-300 text-sm md:text-base select-none">
               {song.primaryArtists}
             </p>
           </div>
