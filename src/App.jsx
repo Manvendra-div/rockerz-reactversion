@@ -6,6 +6,7 @@ import Player from "./components/Player";
 import Footer from "./components/Footer";
 import Loading from "./components/LoadingAnimation";
 import Notify from "./components/Notify";
+import Notice from "./components/Notice";
 
 function App() {
   const [currentTrack, setcurrentTrack] = useState(null);
@@ -15,6 +16,7 @@ function App() {
   const [notifyContent, setNotifyContent] = useState("");
   return (
     <>
+    <Notice/>
       <NavBar
         toggleNotification={setIsNotifyVisible}
         addNotifyContent={setNotifyContent}
