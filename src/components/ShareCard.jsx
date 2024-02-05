@@ -28,7 +28,7 @@ async function copyTextToClipboard(text) {
 const cardContent = {
   title: "Share this project with your friends",
   content: (
-    <>
+    <div className="mx-2">
       <WhatsappShareButton title={shareData} url={projectUrl}>
         <WhatsappIcon className="w-10 xl:w-20" round />
       </WhatsappShareButton>
@@ -52,7 +52,7 @@ const cardContent = {
       >
         <FaCopy className="text-lg xl:text-4xl" />
       </button>
-    </>
+    </div>
   ),
 };
 const ShareCard = ({
