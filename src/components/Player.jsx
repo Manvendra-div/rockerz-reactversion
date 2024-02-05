@@ -106,7 +106,7 @@ const Player = ({ track }) => {
           isPlayerExpanded ? "flex-col lg:flex-row" : ""
         } justify-between items-center`}
       >
-        <div className={`${isPlayerExpanded ? "w-[90%] lg:w-[20%] self-center" : "w-[45%] lg:w-[20%]"}`}>
+        <div className={`${isPlayerExpanded ? "w-[90%] self-center" : "w-[45%]"} lg:w-[20%]`}>
           <Transition
             show={isPlayerExpanded}
             className="p-2 flex justify-center"
@@ -132,7 +132,7 @@ const Player = ({ track }) => {
         </div>
         <div
           className={`audioContainer ${
-            isPlayerExpanded ? "w-[90%] lg:w-[80%]" : "lg:w-[85%]"
+            isPlayerExpanded ? "w-[90%] md:w-[80%]" : "md:w-[85%]"
           }`}
         >
           <audio
