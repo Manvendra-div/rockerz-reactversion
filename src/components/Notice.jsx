@@ -37,7 +37,8 @@ const Notice = () => {
         <IoClose
             size={30}
             className="cursor-pointer mx-2"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               setcleanNotice(false);
             }}
           />

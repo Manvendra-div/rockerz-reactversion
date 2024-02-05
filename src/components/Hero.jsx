@@ -148,7 +148,7 @@ const Hero = ({
         <img
           src={data.image[2].link}
           key={index}
-          className="w-[30%] lg:w-[15%] h-auto object-cover transition-transform transform group-hover:scale-105"
+          className="w-[30%] md:w-[15%] h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
         />
         <div className="p-3 overflow-x-hidden whitespace-nowrap">
