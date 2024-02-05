@@ -1,12 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import {
-  FaXTwitter,
-  FaFacebook,
-  FaLinkedin,
-  FaCopy,
-  FaTelegram,
-} from "react-icons/fa6";
+import { FaCopy } from "react-icons/fa6";
+import parse from "html-react-parser";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -92,7 +87,7 @@ const ShareCard = ({
       className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0 left-0"
     >
       <Transition.Child
-        className="w-[90%] md:w-[50%] backdrop-blur-lg bg-white/10 rounded-xl p-3 border border-gray-300 shadow-2xl flex flex-col justify-center items-center"
+        className="w-[90%] md:w-[50%] backdrop-blur-lg bg-white/10 rounded-xl py-3 border border-gray-300 shadow-2xl flex flex-col justify-center items-center"
         enter="ease-out duration-300"
         enterFrom="opacity-0"
         enterTo="opacity-100"
@@ -102,22 +97,24 @@ const ShareCard = ({
       >
         <div className="flex justify-between w-full">
           <span className="font-semibold text-sm md:text-lg m-3 overflow-x-hidden whitespace-nowrap w-[80%]">
-            <p className={`${
-              contentOfCard.title?.length > 37 ? "hover:animate-marquee" : ""
-            }`}>
-            {contentOfCard.title}
-          </p>
+            <p
+              className={`${
+                contentOfCard.title?.length > 37 ? "hover:animate-marquee" : ""
+              }`}
+            >
+              {parse(contentOfCard.title)}
+            </p>
           </span>
           <IoClose
             size={30}
-            className="cursor-pointer"
+            className="cursor-pointer mx-2"
             onClick={() => {
               toggleFunc(false);
             }}
           />
         </div>
 
-        <div className="m-3 p-4 rounded-xl backdrop-blur-sm bg-black/30 w-[98%] xl:w-[95%] mx-3 border-[1px] border-black flex flex-wrap justify-between items-center">
+        <div className="my-3 py-4 backdrop-blur-sm bg-black/30 border-y-[1px] border-black flex flex-wrap justify-between items-center w-full">
           {contentOfCard.content}
         </div>
         <span className="p-3 text-sm xl:text-xl">
