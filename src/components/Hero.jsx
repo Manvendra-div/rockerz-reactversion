@@ -6,7 +6,7 @@ import { Transition, Combobox } from "@headlessui/react";
 import ShareCard from "./ShareCard";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
-import BASE_API from "../BASE_API.js"
+import BASE_API from "../BASE_API.js";
 
 const fetchData = async (URL) => {
   try {
@@ -110,7 +110,11 @@ const Hero = ({
       const searchfromId = (await fetchData(`${BASE_API}/albums?id=${id}`))
         .data;
       const compiledSongCards = (
-        <div className="overflow-y-scroll max-h-[500px] md:max-h-[300px] px-2">
+        <div
+          className={`${
+            searchfromId.songs.length > 3 ? "overflow-y-scroll" : ""
+          } max-h-[500px] md:max-h-[300px] px-2`}
+        >
           {searchfromId.songs.map((song, index) => (
             <SongCard data={song} key={index} index={index} />
           ))}
