@@ -10,7 +10,7 @@ body {
 }
 
 .navHeader {
-  @apply sticky top-0 flex justify-center items-center backdrop-blur-lg bg-white/10 px-5 py-3 rounded-b-lg shadow-lg w-full z-20;
+  @apply sticky top-0 flex justify-center items-center backdrop-blur-xl bg-white/5 px-5 py-3 rounded-b-lg shadow-lg w-full z-20;
 }
 .navResponsive {
   @apply flex justify-between items-center w-[95%] lg:w-[85%] 2xl:w-[1440px];
