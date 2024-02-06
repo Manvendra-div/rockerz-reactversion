@@ -113,7 +113,7 @@ const Hero = ({
         <div
           className={`${
             searchfromId.songs.length > 3 ? "overflow-y-scroll" : ""
-          } max-h-[500px] md:max-h-[300px] px-2`}
+          } max-h-[500px] md:max-h-[300px] px-2 w-full`}
         >
           {searchfromId.songs.map((song, index) => (
             <SongCard data={song} key={index} index={index} />
@@ -144,9 +144,9 @@ const Hero = ({
   }
   const SongCard = ({ data, index }) => {
     return (
-      <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5  border border-gray-400 select-none">
+      <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5 border border-gray-400 select-none">
         <img
-          src={data.image[2].link}
+          src={data.image[1].link}
           key={index}
           className="w-[30%] md:w-[15%] h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
@@ -221,7 +221,7 @@ const Hero = ({
     return (
       <div className="w-[30%] md:w-[15%] cursor-pointer mx-1 md:mx-2 mb-3 relative rounded-md overflow-hidden m-1 group backdrop-blur-lg bg-white/5  border border-gray-400 select-none">
         <img
-          src={data.image[2].link}
+          src={data.image[1].link}
           key={index}
           className="h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"

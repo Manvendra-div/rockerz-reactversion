@@ -27,12 +27,6 @@ const projectUrl = "https://rockerzwebreact.netlify.app";
 const copyBtn = (pushAlert,addContentAlert) => {
   pushAlert(true);
   addContentAlert("link has been copied to clipboard");
-  // navigator.clipboard
-  //   .writeText(`${projectUrl}\n\n${shareData}`)
-  //   .then(() => {})
-  //   .catch(() => {
-  //     addContentAlert("failed to copy link to clipboard");
-  //   });
   setTimeout(() => {
     pushAlert(false);
   }, 4000);
