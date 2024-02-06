@@ -14,6 +14,7 @@ import {
   WhatsappShareButton,
   XIcon,
 } from "react-share";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { Transition } from "@headlessui/react";
 const shareData = `
 🎵 Explore Rockerz WEB
@@ -22,58 +23,58 @@ Discover music like never before with Rockerz WEB! 🚀 Your go-to search engine
 `;
 
 const projectUrl = "https://rockerzwebreact.netlify.app";
-async function copyTextToClipboard(text) {
-  return await navigator.clipboard.writeText(text);
-}
-const cardContent = {
-  title: "Share this project with your friends",
-  content: (
-    <div className="flex flex-wrap justify-between items-center w-full mx-5">
-      <WhatsappShareButton title={shareData} url={projectUrl}>
-        <WhatsappIcon className="w-10 xl:w-20" round />
-      </WhatsappShareButton>
-      <TelegramShareButton title={shareData} url={projectUrl}>
-        <TelegramIcon className="w-10 xl:w-20" round />
-      </TelegramShareButton>
-      <TwitterShareButton title={shareData} url={projectUrl}>
-        <XIcon className="w-10 xl:w-20" round />
-      </TwitterShareButton>
-      <FacebookShareButton title={shareData} url={projectUrl}>
-        <FacebookIcon className="w-10 xl:w-20" round />
-      </FacebookShareButton>
-      <LinkedinShareButton title={shareData} url={projectUrl}>
-        <LinkedinIcon className="w-10 xl:w-20" round />
-      </LinkedinShareButton>
-      <button
-        className="hidden md:block bg-gray-500 p-3 rounded-xl shadow-xl focus:shadow border-transparent border-[1px] focus-within:border-[#EA580C]"
-        onClick={() => {
-          copyBtn();
-        }}
-      >
-        <FaCopy className="text-lg xl:text-4xl" />
-      </button>
-    </div>
-  ),
+
+const copyBtn = (pushAlert,addContentAlert) => {
+  pushAlert(true);
+  addContentAlert("link has been copied to clipboard");
+  // navigator.clipboard
+  //   .writeText(`${projectUrl}\n\n${shareData}`)
+  //   .then(() => {})
+  //   .catch(() => {
+  //     addContentAlert("failed to copy link to clipboard");
+  //   });
+  setTimeout(() => {
+    pushAlert(false);
+  }, 4000);
 };
 const ShareCard = ({
   toggleFunc,
   pushNoti,
   addContentNoti,
   cardState,
-  contentOfCard = cardContent,
+  contentOfCard,
 }) => {
-  const copyBtn = () => {
-    pushNoti(true);
-    addContentNoti("link has been copied to clipboard");
-    navigator.clipboard
-      .writeText(`${projectUrl}\n\n${shareData}`)
-      .then(() => {})
-      .catch(() => {
-        addContentNoti("failed to copy link to clipboard");
-      });
-    setTimeout(() => {
-      pushNoti(false);
-    }, 4000);
+  
+  const cardContent = {
+    title: "Share this project with your friends",
+    content: (
+      <div className="flex flex-wrap justify-between items-center w-full mx-5">
+        <WhatsappShareButton title={shareData} url={projectUrl}>
+          <WhatsappIcon className="w-10 xl:w-20" round />
+        </WhatsappShareButton>
+        <TelegramShareButton title={shareData} url={projectUrl}>
+          <TelegramIcon className="w-10 xl:w-20" round />
+        </TelegramShareButton>
+        <TwitterShareButton title={shareData} url={projectUrl}>
+          <XIcon className="w-10 xl:w-20" round />
+        </TwitterShareButton>
+        <FacebookShareButton title={shareData} url={projectUrl}>
+          <FacebookIcon className="w-10 xl:w-20" round />
+        </FacebookShareButton>
+        <LinkedinShareButton title={shareData} url={projectUrl}>
+          <LinkedinIcon className="w-10 xl:w-20" round />
+        </LinkedinShareButton>
+        <CopyToClipboard text={`${projectUrl}\n\n${shareData}`}
+          onCopy={() => copyBtn(pushNoti,addContentNoti)}>
+          <button
+          className="backdrop-blur-sm bg-white/10 p-3 rounded-xl shadow-xl focus:shadow border-gray-400 border-[1px] focus-within:border-[#EA580C]"
+        >
+          <FaCopy className="text-lg xl:text-4xl" />
+        </button>
+        </CopyToClipboard>
+        
+      </div>
+    ),
   };
   return (
     <Transition
@@ -105,10 +106,10 @@ const ShareCard = ({
           <span className="font-semibold text-sm md:text-lg m-3 overflow-x-hidden whitespace-nowrap w-[80%]">
             <p
               className={`${
-                contentOfCard.title?.length > 37 ? "hover:animate-marquee" : ""
+                (contentOfCard===undefined ? cardContent?.title : contentOfCard?.title).length > 37 ? "hover:animate-marquee" : ""
               }`}
             >
-              {parse(contentOfCard.title)}
+              {contentOfCard===undefined ? parse(cardContent.title):parse(contentOfCard?.title)}
             </p>
           </span>
           <IoClose
@@ -121,7 +122,7 @@ const ShareCard = ({
         </div>
 
         <div className="my-3 py-4 backdrop-blur-sm bg-black/30 border-y-[1px] border-black flex flex-wrap justify-center items-center w-full">
-          {contentOfCard.content}
+        {contentOfCard===undefined ? cardContent.content:contentOfCard.content}
         </div>
         <span className="p-3 text-sm xl:text-xl">
           Made with ❤️ by{" "}
