@@ -7,7 +7,6 @@ import ShareCard from "./ShareCard";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
 import BASE_API from "../BASE_API.js";
-import Slider from "./Slider.jsx";
 
 const fetchData = async (URL) => {
   try {
@@ -52,15 +51,15 @@ const Hero = ({
         searchsong.forEach((song) => {
           const stringNumbers = song.primaryArtistsId;
           const stringArray = stringNumbers.split(", ");
-          const numberArray = stringArray.map(str => parseInt(str, 10));
+          const numberArray = stringArray.map((str) => parseInt(str, 10));
           artistsArray = artistsArray.concat(numberArray);
         });
         return artistsArray;
-      }
+      };
       const formatedSearchdata = {
         songs: searchsong,
         albums: searchalbums,
-        artists: prepareArtistsArray()
+        artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedSearchdata);
       loadinFunc(false);
@@ -88,14 +87,14 @@ const Hero = ({
         homepagedata.songs.map((song) => {
           typeof song.primaryArtists === "string"
             ? artistsArray.push(song.primaryArtists.id)
-            : song.primaryArtists.map((artist) => artistsArray.push(artist.id))
-        })
+            : song.primaryArtists.map((artist) => artistsArray.push(artist.id));
+        });
         return artistsArray;
-      }
+      };
       const formatedHomePagedata = {
         songs: homepagedata.songs,
         albums: homepagedata.albums,
-        artists: prepareArtistsArray()
+        artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedHomePagedata);
       loadinFunc(false);
@@ -136,8 +135,9 @@ const Hero = ({
         .data;
       const compiledSongCards = (
         <div
-          className={`${searchfromId.songs.length > 3 ? "overflow-y-scroll" : ""
-            } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+          className={`${
+            searchfromId.songs.length >= 3 ? "overflow-y-scroll" : "overflow-hidden"
+          } max-h-[500px] md:max-h-[300px] px-2 w-full`}
         >
           {searchfromId.songs.map((song, index) => (
             <SongCard data={song} key={index} index={index} />
@@ -177,8 +177,9 @@ const Hero = ({
         />
         <div className="p-3 overflow-x-hidden whitespace-nowrap">
           <h3
-            className={`text-lg font-semibold mb-1 ${data?.name.length > 20 ? "group-hover:animate-marquee" : ""
-              }`}
+            className={`text-lg font-semibold mb-1 ${
+              data?.name.length > 20 ? "group-hover:animate-marquee" : ""
+            }`}
           >
             {`${parse(data.name)}`}
           </h3>
@@ -246,7 +247,7 @@ const Hero = ({
         <img
           src={data.image[1].link}
           key={index}
-          className="h-auto object-cover transition-transform transform group-hover:scale-105"
+          className="w-full h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
         />
         <div
@@ -255,16 +256,18 @@ const Hero = ({
         >
           <div className="text-center overflow-x-hidden whitespace-nowrap opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition">
             <h3
-              className={`text-sm font-semibold mb-1 ${data?.name.length > 15 ? "group-hover:animate-marquee" : ""
-                }`}
+              className={`text-sm font-semibold mb-1 ${
+                data?.name.length > 15 ? "group-hover:animate-marquee" : ""
+              }`}
             >
               {`${parse(data.name)}`}
             </h3>
             <p
-              className={`text-xs ${data.artists.map((artist) => artist.name).join(", ").length > 10
-                ? "group-hover:animate-marquee"
-                : ""
-                }`}
+              className={`text-xs ${
+                data.artists.map((artist) => artist.name).join(", ").length > 10
+                  ? "group-hover:animate-marquee"
+                  : ""
+              }`}
             >
               {parse(data.artists.map((artist) => artist.name).join(", "))}
             </p>
@@ -352,25 +355,27 @@ const Hero = ({
                     <Combobox.Option
                       className="hover:backdrop-blur-sm hover:bg-black/50 text-white p-1 cursor-pointer overflow-x-hidden rounded-md whitespace-nowrap flex items-center"
                       onClick={() =>
-                        throwSearchRequestfromOptions(`${parse(recommend.name) +
+                        throwSearchRequestfromOptions(`${
+                          parse(recommend.name) +
                           " " +
                           parse(
                             typeof recommend.primaryArtists === "string"
                               ? recommend.primaryArtists
                               : recommend.primaryArtists
-                                .map((name) => name.name)
-                                .join(", ")
+                                  .map((name) => name.name)
+                                  .join(", ")
                           )
-                          }
+                        }
                       `)
                       }
                       key={index}
                     >
                       <p
-                        className={`${recommend.name.length > 20
-                          ? "hover:animate-marquee"
-                          : ""
-                          }`}
+                        className={`${
+                          recommend.name.length > 20
+                            ? "hover:animate-marquee"
+                            : ""
+                        }`}
                       >
                         {parse(recommend.name) + " | "}
                         <span className="text-xs">
@@ -378,8 +383,8 @@ const Hero = ({
                             typeof recommend.primaryArtists === "string"
                               ? recommend.primaryArtists
                               : recommend.primaryArtists
-                                .map((name) => name.name)
-                                .join(", ")
+                                  .map((name) => name.name)
+                                  .join(", ")
                           )}
                         </span>
                       </p>
@@ -420,10 +425,11 @@ const Hero = ({
                   />
                   <div className="lg:ml-5 mt-1 lg:mt-3 p-2 ">
                     <h3
-                      className={`text-2xl font-semibold mb-2 leading-tight ${songSectionData.songs[0]?.name.length > 20
-                        ? "group-hover:animate-marquee"
-                        : ""
-                        }`}
+                      className={`text-2xl font-semibold mb-2 leading-tight ${
+                        songSectionData.songs[0]?.name.length > 20
+                          ? "group-hover:animate-marquee"
+                          : ""
+                      }`}
                     >
                       {`${parse(songSectionData.songs[0]?.name)}`}
                     </h3>
@@ -433,8 +439,8 @@ const Hero = ({
                           "string"
                           ? songSectionData.songs[0]?.primaryArtists
                           : songSectionData.songs[0]?.primaryArtists
-                            .map((name) => name.name)
-                            .join(", ")
+                              .map((name) => name.name)
+                              .join(", ")
                       )}
                     </p>
                   </div>
@@ -539,7 +545,6 @@ const Hero = ({
                 <AlbumsCard data={song} key={index} index={index} />
               ))}
             </div>
-            <Slider artistsIds={songSectionData?.artists}/>
           </Transition>
         </div>
       </div>
