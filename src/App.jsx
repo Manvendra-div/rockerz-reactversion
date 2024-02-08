@@ -52,8 +52,7 @@ function App() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-     
-        <Notify content={notifyContent} />
+        <Notify content={notifyContent} setNotifyState={setIsNotifyVisible}/>
         </Transition>
     </>
   );
