@@ -3,8 +3,9 @@ import axios from "axios";
 import { BiPause, BiPlay } from "react-icons/bi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
-import Loading from "./LoadingAnimation"
-import BASE_API from "../BASE_API.js"
+import Loading from "./LoadingAnimation";
+import parse from "html-react-parser";
+import BASE_API from "../BASE_API.js";
 
 const fetchData = async (URL) => {
   try {
@@ -20,15 +21,39 @@ const Player = ({ track }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [song, setSong] = useState(null);
+  const [playerData, setPlayerData] = useState(null);
+  const [isfromHero, setIsfromHero] = useState(false);
+  const [nextSong, setNextSong] = useState([]);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
-
   const getTrackData = async (Trackid) => {
     try {
       const trackData = await fetchData(`${BASE_API}/songs?id=${Trackid}`);
-      const songData = trackData.data[0];
+      const songData = trackData?.data[0];
+      const getNextTrack = async () => {
+        setNextSong([]);
+        const prepareArtistsArray = (input) => {
+          if (input.includes(",")) {
+            return input.split(",").map(Number)[0];
+          } else {
+            return parseInt(input);
+          }
+        };
+        const nexttrack = await fetchData(
+          `${BASE_API}/artists/${prepareArtistsArray(
+            songData.primaryArtistsId
+          )}/recommendations/${songData.id}`
+        );
+        setNextSong(nexttrack.data);
+      };
       if (songData) {
-        setSong(songData);
+        // setCurrentSongIndex(currentSongIndex + 1);
+        // addSongInSongChain((songchain) => {
+        //   return [...songchain, songChain[currentSongIndex + 1]];
+        // });
+        getNextTrack();
+        setPlayerData({
+          song: songData,
+        });
       } else {
         console.error("Error fetching song data: Invalid response structure");
       }
@@ -36,10 +61,14 @@ const Player = ({ track }) => {
       console.error("Error fetching song data:", error);
     }
   };
-  useEffect(() => {
-    getTrackData(track.id);
-  }, [track.id]);
 
+  const setNewTrack = (id) => {
+    setIsfromHero(false)
+    getTrackData(id);
+  };
+  useEffect(() => {
+    getTrackData(track[0].id);
+  }, [track[1]]);
   useEffect(() => {
     if (audioRef.current && isPlaying) {
       audioRef.current.play();
@@ -50,7 +79,7 @@ const Player = ({ track }) => {
       audioRef.current.play();
       setIsPlaying(true);
     }
-  }, [song]);
+  }, [playerData?.song]);
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -64,6 +93,9 @@ const Player = ({ track }) => {
   const handleTimeUpdate = () => {
     const currentTime = audioRef.current.currentTime;
     const duration = audioRef.current.duration;
+    if (currentTime >= duration) {
+      setNewTrack(nextSong[0].id);
+    }
     setCurrentTime(currentTime);
     setDuration(duration);
   };
@@ -82,14 +114,14 @@ const Player = ({ track }) => {
   const togglePlayerUI = () => {
     setIsPlayerExpanded(!isPlayerExpanded);
   };
-  if (!song) {
-    return <Loading/>;
+  if (!playerData) {
+    return <Loading />;
   }
 
   return (
     <div
       className={`playerSuperContainerConst ${
-        isPlayerExpanded ? "py-20 h-screen" : "py-3"
+        isPlayerExpanded ? "py-12 h-screen" : "py-3"
       } px-5`}
     >
       <div className="w-full text-white text-end">
@@ -106,27 +138,42 @@ const Player = ({ track }) => {
           isPlayerExpanded ? "flex-col lg:flex-row" : ""
         } justify-between items-center`}
       >
-        <div className={`${isPlayerExpanded ? "w-[90%] self-center" : "w-[45%]"} lg:w-[20%]`}>
+        <div
+          className={`${
+            isPlayerExpanded ? "w-[90%] self-center" : "w-[45%]"
+          } lg:w-[20%]`}
+        >
           <Transition
             show={isPlayerExpanded}
             className="p-2 flex justify-center"
             enter="transition-all ease-in-out duration-500 delay-[100ms]"
             enterFrom="opacity-0 translate-y-6"
             enterTo="opacity-100 translate-y-0"
-            leave="transition-all ease-in-out duration-300"
+            leave="transition-all ease-in-out duration-150"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
             <img
-              src={song.image[2].link}
+              src={playerData?.song.image[2].link}
               alt="Album Thumb"
               className={`thumbNail self-center`}
             />
           </Transition>
-          <div className={`songContainerPlayer overflow-x-hidden w-full ${isPlayerExpanded? "text-center": "text-start"}`}>
-            <p className={`songTitle ${(song.name?.length>20 ? "hover:animate-marquee whitespace-nowrap": "")}`} dangerouslySetInnerHTML={{__html: song.name}}/>
+          <div
+            className={`songContainerPlayer overflow-x-hidden w-full ${
+              isPlayerExpanded ? "text-center" : "text-start"
+            }`}
+          >
+            <p
+              className={`songTitle ${
+                playerData?.song?.name?.length > 20
+                  ? "hover:animate-marquee whitespace-nowrap"
+                  : ""
+              }`}
+              dangerouslySetInnerHTML={{ __html: playerData?.song?.name }}
+            />
             <p className="text-gray-300 text-sm md:text-base select-none">
-              {song.primaryArtists}
+              {playerData?.song?.primaryArtists}
             </p>
           </div>
         </div>
@@ -137,7 +184,7 @@ const Player = ({ track }) => {
         >
           <audio
             ref={audioRef}
-            src={song.downloadUrl[4].link}
+            src={playerData?.song.downloadUrl[4].link}
             onTimeUpdate={handleTimeUpdate}
           />
           <button className="playBtn" onClick={togglePlay}>
@@ -156,6 +203,44 @@ const Player = ({ track }) => {
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
+          <Transition
+            show={isPlayerExpanded}
+            className="flex flex-col justify-center items-center w-full"
+            enter="transition-all ease-in-out duration-500 delay-[500ms]"
+            enterFrom="opacity-0 translate-y-6"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition-all ease-in-out duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="w-[80%] md:w-[50%] rounded-lg p-2">
+              <span className="my-2">Up Next</span>
+              <div className="h-[130px]">
+                {nextSong.length > 2 &&
+                  nextSong?.slice(0, 2).map((song, index) => (
+                    <div
+                      className="flex items-center backdrop-blur-sm bg-black/10 hover:bg-black/20 border-[1px] border-gray-300 m-1 rounded shadow-xl cursor-pointer"
+                      onClick={() => {
+                        setNewTrack(song.id);
+                      }}
+                      key={index}
+                    >
+                      <img
+                        src={song.image[0].link}
+                        className="rounded-l"
+                        alt=""
+                      />
+                      <div className="select-none mx-3 overflow-hidden whitespace-nowrap">
+                        <div className="text-sm">{parse(song.name)}</div>
+                        <div className="text-xs">
+                          {parse(song.primaryArtists)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </Transition>
         </div>
       </div>
     </div>
