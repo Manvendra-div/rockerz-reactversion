@@ -13,6 +13,7 @@ function App() {
   const [loadingState, setloadingState] = useState(false);
   const [isNotify, setIsNotifyVisible] = useState(false);
   const [appearPlayer,setappearPlayer] = useState(false);
+  const [triggerPlayernew,settriggerPlayernew] = useState(0);
   const [notifyContent, setNotifyContent] = useState("");
   return (
     <>
@@ -28,6 +29,8 @@ function App() {
         toggleNotification={setIsNotifyVisible}
         addNotifyContent={setNotifyContent}
         showPlayer={setappearPlayer}
+        playnewsong={triggerPlayernew}
+        setplaynewsong={settriggerPlayernew}
       />
       <Transition
           show={appearPlayer}

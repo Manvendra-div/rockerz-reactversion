@@ -23,6 +23,8 @@ const Hero = ({
   toggleNotification,
   addNotifyContent,
   showPlayer,
+  playnewsong,
+  setplaynewsong,
 }) => {
   const [songSectionData, setSongSectionData] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
@@ -80,7 +82,7 @@ const Hero = ({
     setdatafromSearchToggle(false);
     setTimeout(async () => {
       const homepagedata = (
-        await fetchData(`${BASE_API}/modules?language=english`)
+        await fetchData(`${BASE_API}/modules?language=hindi,english`)
       ).data.trending;
       const prepareArtistsArray = () => {
         let artistsArray = [];
@@ -122,8 +124,9 @@ const Hero = ({
   const launchPlayer = (data) => {
     showPlayer(false);
     setAlbumCardToggle(false);
+    setplaynewsong(playnewsong+1);
     setTimeout(() => {
-      setTrack(data);
+      setTrack([data, playnewsong]);
       showPlayer(true);
     }, 200);
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
