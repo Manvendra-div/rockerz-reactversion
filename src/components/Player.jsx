@@ -122,7 +122,7 @@ const Player = ({ track }) => {
     <div
       className={`playerSuperContainerConst ${
         isPlayerExpanded ? "py-12 h-screen" : "py-3"
-      } px-5`}
+      } px-5 transition-all duration-300`}
     >
       <div className="w-full text-white text-end">
         <button className="" onClick={togglePlayerUI}>
