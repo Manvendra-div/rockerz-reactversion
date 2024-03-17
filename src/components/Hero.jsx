@@ -420,10 +420,10 @@ const Hero = ({
               )}
 
               {songSectionData.songs?.length > 0 && (
-                <div className="relative flex flex-col bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400 overflow-x-hidden p-5 select-none">
+                <div className="relative flex flex-col bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400 overflow-x-hidden select-none">
                   <img
                     src={songSectionData.songs[0]?.image[2].link}
-                    className="w-full object-cover transition-transform transform group-hover:scale-105 rounded-xl"
+                    className="w-full object-cover transition-transform transform group-hover:scale-105 rounded-t-xl"
                     alt="Song Image"
                   />
                   <div className="lg:ml-5 mt-1 lg:mt-3 p-2 ">
