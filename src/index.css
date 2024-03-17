@@ -99,7 +99,7 @@ body {
   @apply w-full flex-1 h-10 px-4 py-2 m-1 placeholder-gray-400 bg-transparent border-none appearance-none focus:outline-none focus:placeholder-transparent focus:ring-0;
 }
 .data-container {
-  @apply backdrop-blur-lg bg-white/10 p-3 lg:p-6 rounded-xl shadow-md w-[90%] 2xl:w-[1200px] my-8;
+  @apply backdrop-blur-lg bg-white/10 p-3 lg:p-6 rounded-xl shadow-md w-[90%] lg:w-[85%] 2xl:w-[1200px] my-8;
 }
 .song-container {
   @apply flex flex-col lg:flex-row justify-center lg:justify-between;
