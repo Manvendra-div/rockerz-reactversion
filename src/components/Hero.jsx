@@ -43,15 +43,15 @@ const Hero = ({
     setTimeout(async () => {
       setSongSectionData([]);
       const searchsong = (
-        await fetchData(`${BASE_API}/search/songs?query=${e}&page=1&limit=5`)
+        await fetchData(`${BASE_API}/api/search/songs?query=${e}`)
       ).data.results;
       const searchalbums = (
-        await fetchData(`${BASE_API}/search/albums?query=${e}`)
+        await fetchData(`${BASE_API}/api/search/albums?query=${e}`)
       ).data.results;
       const prepareArtistsArray = () => {
         let artistsArray = [];
         searchsong.forEach((song) => {
-          const stringNumbers = song.primaryArtistsId;
+          const stringNumbers = song.artists.primary[0].id;
           const stringArray = stringNumbers.split(", ");
           const numberArray = stringArray.map((str) => parseInt(str, 10));
           artistsArray = artistsArray.concat(numberArray);
@@ -78,29 +78,29 @@ const Hero = ({
     }, 4000);
   };
   const fetchHomePage = async () => {
-    loadinFunc(true);
-    setdatafromSearchToggle(false);
-    setTimeout(async () => {
-      const homepagedata = (
-        await fetchData(`${BASE_API}/modules?language=hindi,english`)
-      ).data.trending;
-      const prepareArtistsArray = () => {
-        let artistsArray = [];
-        homepagedata.songs.map((song) => {
-          typeof song.primaryArtists === "string"
-            ? artistsArray.push(song.primaryArtists.id)
-            : song.primaryArtists.map((artist) => artistsArray.push(artist.id));
-        });
-        return artistsArray;
-      };
-      const formatedHomePagedata = {
-        songs: homepagedata.songs,
-        albums: homepagedata.albums,
-        artists: prepareArtistsArray(),
-      };
-      setSongSectionData(formatedHomePagedata);
-      loadinFunc(false);
-    }, 100);
+    loadinFunc(false);
+    // setdatafromSearchToggle(false);
+    // setTimeout(async () => {
+    //   const homepagedata = (
+    //     await fetchData(`${BASE_API}/modules?language=hindi,english`)
+    //   ).data.trending;
+    //   const prepareArtistsArray = () => {
+    //     let artistsArray = [];
+    //     homepagedata.songs.map((song) => {
+    //       typeof song.primaryArtists === "string"
+    //         ? artistsArray.push(song.primaryArtists.id)
+    //         : song.primaryArtists.map((artist) => artistsArray.push(artist.id));
+    //     });
+    //     return artistsArray;
+    //   };
+    //   const formatedHomePagedata = {
+    //     songs: homepagedata.songs,
+    //     albums: homepagedata.albums,
+    //     artists: prepareArtistsArray(),
+    //   };
+    //   setSongSectionData(formatedHomePagedata);
+    //   loadinFunc(false);
+    // }, 100);
   };
   useEffect(() => {
     if (!datafromSearchToggle) {
@@ -124,7 +124,7 @@ const Hero = ({
   const launchPlayer = (data) => {
     showPlayer(false);
     setAlbumCardToggle(false);
-    setplaynewsong(playnewsong+1);
+    setplaynewsong(playnewsong + 1);
     setTimeout(() => {
       setTrack([data, playnewsong]);
       showPlayer(true);
@@ -134,12 +134,14 @@ const Hero = ({
   const fetchPlaylist = (id) => {
     loadinFunc(true);
     setTimeout(async () => {
-      const searchfromId = (await fetchData(`${BASE_API}/albums?id=${id}`))
+      const searchfromId = (await fetchData(`${BASE_API}/api/albums?id=${id}`))
         .data;
       const compiledSongCards = (
         <div
           className={`${
-            searchfromId.songs.length >= 3 ? "overflow-y-scroll" : "overflow-hidden"
+            searchfromId.songs.length >= 3
+              ? "overflow-y-scroll"
+              : "overflow-hidden"
           } max-h-[500px] md:max-h-[300px] px-2 w-full`}
         >
           {searchfromId.songs.map((song, index) => (
@@ -149,9 +151,7 @@ const Hero = ({
       );
       const formatedSearchdata = {
         title: `${searchfromId.name} | ${parse(
-          typeof searchfromId.primaryArtists === "string"
-            ? searchfromId.primaryArtists
-            : searchfromId.primaryArtists.map((name) => name.name).join(", ")
+          searchfromId.artists.primary.map((name) => name.name).join(", ")
         )}`,
         content: compiledSongCards,
       };
@@ -173,7 +173,7 @@ const Hero = ({
     return (
       <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5 border border-gray-400 select-none">
         <img
-          src={data.image[1].link}
+          src={data.image[1].url}
           key={index}
           className="w-[30%] md:w-[15%] h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
@@ -187,11 +187,7 @@ const Hero = ({
             {`${parse(data.name)}`}
           </h3>
           <p className="text-sm">
-            {parse(
-              typeof data.primaryArtists === "string"
-                ? data.primaryArtists
-                : data.primaryArtists.map((name) => name.name).join(", ")
-            )}
+            {parse(data.artists.primary.map((name) => name.name).join(", "))}
           </p>
         </div>
         <div className="absolute bg-black rounded bg-opacity-0 group-hover:bg-opacity-60 w-full h-full top-0 left-0 flex items-center group-hover:opacity-100 transition justify-evenly">
@@ -248,7 +244,7 @@ const Hero = ({
     return (
       <div className="w-[30%] md:w-[15%] cursor-pointer mx-1 md:mx-2 mb-3 relative rounded-md overflow-hidden m-1 group backdrop-blur-lg bg-white/5  border border-gray-400 select-none">
         <img
-          src={data.image[1].link}
+          src={data.image[1].url}
           key={index}
           className="w-full h-auto object-cover transition-transform transform group-hover:scale-105"
           alt="Song Image"
@@ -267,12 +263,15 @@ const Hero = ({
             </h3>
             <p
               className={`text-xs ${
-                data.artists.map((artist) => artist.name).join(", ").length > 10
+                data.artists.primary.map((artist) => artist.name).join(", ")
+                  .length > 10
                   ? "group-hover:animate-marquee"
                   : ""
               }`}
             >
-              {parse(data.artists.map((artist) => artist.name).join(", "))}
+              {parse(
+                data.artists.primary.map((artist) => artist.name).join(", ")
+              )}
             </p>
           </div>
         </div>
@@ -282,7 +281,7 @@ const Hero = ({
   const getRecommendations = async (keyword) => {
     if (keyword.length > 2) {
       const recom = await fetchData(
-        `${BASE_API}/search/songs?query=${keyword.replace(
+        `${BASE_API}/api/search/songs?query=${keyword.replace(
           / /g,
           "+"
         )}&page=1&limit=4`
@@ -358,17 +357,7 @@ const Hero = ({
                     <Combobox.Option
                       className="hover:backdrop-blur-sm hover:bg-black/50 text-white p-1 cursor-pointer overflow-x-hidden rounded-md whitespace-nowrap flex items-center"
                       onClick={() =>
-                        throwSearchRequestfromOptions(`${
-                          parse(recommend.name) +
-                          " " +
-                          parse(
-                            typeof recommend.primaryArtists === "string"
-                              ? recommend.primaryArtists
-                              : recommend.primaryArtists
-                                  .map((name) => name.name)
-                                  .join(", ")
-                          )
-                        }
+                        throwSearchRequestfromOptions(`${recommend.id}
                       `)
                       }
                       key={index}
@@ -383,9 +372,9 @@ const Hero = ({
                         {parse(recommend.name) + " | "}
                         <span className="text-xs">
                           {parse(
-                            typeof recommend.primaryArtists === "string"
-                              ? recommend.primaryArtists
-                              : recommend.primaryArtists
+                            typeof recommend.artists === "string"
+                              ? recommend.artists
+                              : recommend.artists.all
                                   .map((name) => name.name)
                                   .join(", ")
                           )}
@@ -422,7 +411,7 @@ const Hero = ({
               {songSectionData.songs?.length > 0 && (
                 <div className="relative flex flex-col bg-white/20 rounded-xl m-1 shadow-md group overflow-hidden border border-gray-400 overflow-x-hidden select-none">
                   <img
-                    src={songSectionData.songs[0]?.image[2].link}
+                    src={songSectionData.songs[0]?.image[2].url}
                     className="w-full object-cover transition-transform transform group-hover:scale-105 rounded-t-xl"
                     alt="Song Image"
                   />
@@ -438,10 +427,9 @@ const Hero = ({
                     </h3>
                     <p className="text-sm leading-relaxed">
                       {parse(
-                        typeof songSectionData.songs[0]?.primaryArtists ===
-                          "string"
-                          ? songSectionData.songs[0]?.primaryArtists
-                          : songSectionData.songs[0]?.primaryArtists
+                        typeof songSectionData.songs[0]?.artists === "string"
+                          ? songSectionData.songs[0]?.artists
+                          : songSectionData.songs[0]?.artists.all
                               .map((name) => name.name)
                               .join(", ")
                       )}

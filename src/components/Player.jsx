@@ -27,30 +27,21 @@ const Player = ({ track }) => {
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
   const getTrackData = async (Trackid) => {
     try {
-      const trackData = await fetchData(`${BASE_API}/songs?id=${Trackid}`);
+      const trackData = await fetchData(`${BASE_API}/api/songs/${Trackid}`);
       const songData = trackData?.data[0];
       const getNextTrack = async () => {
         setNextSong([]);
-        const prepareArtistsArray = (input) => {
-          if (input.includes(",")) {
-            return input.split(",").map(Number)[0];
-          } else {
-            return parseInt(input);
-          }
-        };
         const nexttrack = await fetchData(
-          `${BASE_API}/artists/${prepareArtistsArray(
-            songData.primaryArtistsId
-          )}/recommendations/${songData.id}`
+          `${BASE_API}/api/songs/${songData.id}/suggestions`
         );
-        setNextSong(nexttrack.data);
+        // setNextSong(nexttrack.data);
       };
       if (songData) {
         // setCurrentSongIndex(currentSongIndex + 1);
         // addSongInSongChain((songchain) => {
         //   return [...songchain, songChain[currentSongIndex + 1]];
         // });
-        getNextTrack();
+        // getNextTrack();
         setPlayerData({
           song: songData,
         });
@@ -93,9 +84,9 @@ const Player = ({ track }) => {
   const handleTimeUpdate = () => {
     const currentTime = audioRef.current.currentTime;
     const duration = audioRef.current.duration;
-    if (currentTime >= duration) {
-      setNewTrack(nextSong[0].id);
-    }
+    // if (currentTime >= duration) {
+    //   setNewTrack(nextSong[0].id);
+    // }
     setCurrentTime(currentTime);
     setDuration(duration);
   };
@@ -154,7 +145,7 @@ const Player = ({ track }) => {
             leaveTo="opacity-0"
           >
             <img
-              src={playerData?.song.image[2].link}
+              src={playerData?.song.image[2].url}
               alt="Album Thumb"
               className={`thumbNail self-center`}
             />
@@ -173,7 +164,7 @@ const Player = ({ track }) => {
               dangerouslySetInnerHTML={{ __html: playerData?.song?.name }}
             />
             <p className="text-gray-300 text-sm md:text-base select-none">
-              {playerData?.song?.primaryArtists}
+              {playerData?.song.artists.primary.map((name) => name.name).join(", ")}
             </p>
           </div>
         </div>
@@ -184,7 +175,7 @@ const Player = ({ track }) => {
         >
           <audio
             ref={audioRef}
-            src={playerData?.song.downloadUrl[4].link}
+            src={playerData?.song.downloadUrl[4].url}
             onTimeUpdate={handleTimeUpdate}
           />
           <button className="playBtn" onClick={togglePlay}>
@@ -233,7 +224,7 @@ const Player = ({ track }) => {
                       <div className="select-none mx-3 overflow-hidden whitespace-nowrap">
                         <div className="text-sm">{parse(song.name)}</div>
                         <div className="text-xs">
-                          {parse(song.primaryArtists)}
+                          {song.artists.primary.map((name) => name.name).join(", ")}
                         </div>
                       </div>
                     </div>
