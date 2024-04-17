@@ -12,29 +12,32 @@ function App() {
   const [currentTrack, setcurrentTrack] = useState(null);
   const [loadingState, setloadingState] = useState(false);
   const [isNotify, setIsNotifyVisible] = useState(false);
-  const [appearPlayer,setappearPlayer] = useState(false);
-  const [triggerPlayernew,settriggerPlayernew] = useState(0);
+  const [appearPlayer, setappearPlayer] = useState(false);
+  const [triggerPlayernew, settriggerPlayernew] = useState(0);
   const [notifyContent, setNotifyContent] = useState("");
   return (
     <>
-    <Notice/>
-      <NavBar
-        toggleNotification={setIsNotifyVisible}
-        addNotifyContent={setNotifyContent}
-      />
-      {loadingState && <Loading />}
-      <Hero
-        setTrack={setcurrentTrack}
-        loadinFunc={setloadingState}
-        toggleNotification={setIsNotifyVisible}
-        addNotifyContent={setNotifyContent}
-        showPlayer={setappearPlayer}
-        playnewsong={triggerPlayernew}
-        setplaynewsong={settriggerPlayernew}
-      />
-      <Transition
+      <div className="flex flex-col justify-start items-center">
+        <Notice />
+        <NavBar
+          toggleNotification={setIsNotifyVisible}
+          addNotifyContent={setNotifyContent}
+        />
+        <Hero
+          setTrack={setcurrentTrack}
+          loadinFunc={setloadingState}
+          toggleNotification={setIsNotifyVisible}
+          addNotifyContent={setNotifyContent}
+          showPlayer={setappearPlayer}
+          playnewsong={triggerPlayernew}
+          setplaynewsong={settriggerPlayernew}
+        />
+
+        {loadingState && <Loading />}
+
+        <Transition
           show={appearPlayer}
-          className="sticky bottom-0 z-20"
+          className="sticky bottom-0 z-20 w-full"
           enter="transition-all ease-in-out duration-500 delay-[200ms]"
           enterFrom="opacity-0 translate-y-6"
           enterTo="opacity-100 translate-y-0"
@@ -43,9 +46,9 @@ function App() {
           leaveTo="opacity-0"
         >
           <Player track={currentTrack} />
-      </Transition>
-      <Footer />
-      <Transition
+        </Transition>
+
+        <Transition
           show={isNotify}
           className="flex justify-center"
           enter="transition-all ease-in-out duration-500 delay-[200ms]"
@@ -55,8 +58,10 @@ function App() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-        <Notify content={notifyContent} setNotifyState={setIsNotifyVisible}/>
+          <Notify content={notifyContent} setNotifyState={setIsNotifyVisible} />
         </Transition>
+        <Footer />
+      </div>
     </>
   );
 }
