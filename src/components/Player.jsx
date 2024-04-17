@@ -23,6 +23,7 @@ const Player = ({ track }) => {
   const [duration, setDuration] = useState(0);
   const [playerData, setPlayerData] = useState(null);
   const [isfromHero, setIsfromHero] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [nextSong, setNextSong] = useState([]);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
   const getTrackData = async (Trackid) => {
@@ -34,14 +35,20 @@ const Player = ({ track }) => {
         const nexttrack = await fetchData(
           `${BASE_API}/api/songs/${songData.id}/suggestions`
         );
-        // setNextSong(nexttrack.data);
+        setNextSong(nexttrack.data);
       };
       if (songData) {
         // setCurrentSongIndex(currentSongIndex + 1);
         // addSongInSongChain((songchain) => {
         //   return [...songchain, songChain[currentSongIndex + 1]];
         // });
-        // getNextTrack();
+        if (currentSongIndex === 0) {
+          getNextTrack();
+          console.log("next track", nextSong);
+          setCurrentSongIndex((count) => count + 1);
+        } else {
+          setCurrentSongIndex((count) => count + 1);
+        }
         setPlayerData({
           song: songData,
         });
@@ -54,7 +61,7 @@ const Player = ({ track }) => {
   };
 
   const setNewTrack = (id) => {
-    setIsfromHero(false)
+    setIsfromHero(false);
     getTrackData(id);
   };
   useEffect(() => {
@@ -84,9 +91,9 @@ const Player = ({ track }) => {
   const handleTimeUpdate = () => {
     const currentTime = audioRef.current.currentTime;
     const duration = audioRef.current.duration;
-    // if (currentTime >= duration) {
-    //   setNewTrack(nextSong[0].id);
-    // }
+    if (currentTime >= duration) {
+      setNewTrack(nextSong[currentSongIndex]?.id);
+    }
     setCurrentTime(currentTime);
     setDuration(duration);
   };
@@ -164,7 +171,9 @@ const Player = ({ track }) => {
               dangerouslySetInnerHTML={{ __html: playerData?.song?.name }}
             />
             <p className="text-gray-300 text-sm md:text-base select-none">
-              {playerData?.song.artists.primary.map((name) => name.name).join(", ")}
+              {playerData?.song.artists.primary
+                .map((name) => name.name)
+                .join(", ")}
             </p>
           </div>
         </div>
@@ -208,27 +217,31 @@ const Player = ({ track }) => {
               <span className="my-2">Up Next</span>
               <div className="h-[130px]">
                 {nextSong.length > 2 &&
-                  nextSong?.slice(0, 2).map((song, index) => (
-                    <div
-                      className="flex items-center backdrop-blur-sm bg-black/10 hover:bg-black/20 border-[1px] border-gray-300 m-1 rounded shadow-xl cursor-pointer"
-                      onClick={() => {
-                        setNewTrack(song.id);
-                      }}
-                      key={index}
-                    >
-                      <img
-                        src={song.image[0].link}
-                        className="rounded-l"
-                        alt=""
-                      />
-                      <div className="select-none mx-3 overflow-hidden whitespace-nowrap">
-                        <div className="text-sm">{parse(song.name)}</div>
-                        <div className="text-xs">
-                          {song.artists.primary.map((name) => name.name).join(", ")}
+                  nextSong
+                    ?.slice(currentSongIndex, currentSongIndex + 2)
+                    .map((song, index) => (
+                      <div
+                        className="flex items-center backdrop-blur-sm bg-black/10 hover:bg-black/20 border-[1px] border-gray-300 m-1 rounded shadow-xl cursor-pointer"
+                        onClick={() => {
+                          setNewTrack(song.id);
+                        }}
+                        key={index}
+                      >
+                        <img
+                          src={song.image[0].url}
+                          className="rounded-l"
+                          alt=""
+                        />
+                        <div className="select-none mx-3 overflow-hidden whitespace-nowrap">
+                          <div className="text-sm">{parse(song.name)}</div>
+                          <div className="text-xs">
+                            {song.artists.primary
+                              .map((name) => name.name)
+                              .join(", ")}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
               </div>
             </div>
           </Transition>
