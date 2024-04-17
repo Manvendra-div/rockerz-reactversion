@@ -1,7 +1,7 @@
 const Footer = () => {
     return (
-      <footer className="footerDiv">
-        <div className="footerContainer">
+      <footer className="border-t bg-[#18191D] w-full bg-opacity-75">
+        <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
           <a
             href="/"
             className="flex title-font font-medium items-center md:justify-start justify-center text-white"

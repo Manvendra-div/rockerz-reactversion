@@ -6,7 +6,7 @@ import { Transition, Combobox } from "@headlessui/react";
 import ShareCard from "./ShareCard";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
-import unavailable_img from "../assets/unavailable.svg"
+import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
 
 const fetchData = async (URL) => {
@@ -304,7 +304,11 @@ const Hero = ({
           contentOfCard={albumCardData}
         />
       )}
-      <div className="hero-container">
+      <div
+        className={`${
+          datafromSearchToggle ? "mt-10" : "my-60 md:my-32"
+        } hero-container h-[70%]`}
+      >
         <div className="hero-element">
           <TypeAnimation
             sequence={[
@@ -388,16 +392,8 @@ const Hero = ({
             </Combobox>
           </Transition>
         </div>
-        <div className="data-container">
-          {!datafromSearchToggle ? (
-            <div className="h-screen flex flex-col justify-start items-center text-center">
-              <img src={unavailable_img} alt="Unavailable" className="w-full md:w-[30%] opacity-20"/>
-              <p>
-                HomePage is disabled for a moment, but wait you can use search
-                and play tracks that suits best to your mood
-              </p>
-            </div>
-          ) : (
+        {datafromSearchToggle && (
+          <div className="data-container">
             <>
               <div className="song-container">
                 <Transition
@@ -549,8 +545,8 @@ const Hero = ({
                 </div>
               </Transition>
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
