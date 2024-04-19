@@ -17,8 +17,8 @@ function App() {
   const [notifyContent, setNotifyContent] = useState("");
   return (
     <>
-      <div className="flex flex-col justify-start items-center">
-        <Notice />
+    <Notice />
+      <div className="flex flex-col justify-between items-center min-h-screen">
         <NavBar
           toggleNotification={setIsNotifyVisible}
           addNotifyContent={setNotifyContent}

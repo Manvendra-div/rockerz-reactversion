@@ -305,9 +305,7 @@ const Hero = ({
         />
       )}
       <div
-        className={`${
-          datafromSearchToggle ? "mt-10" : "my-60 md:my-32"
-        } hero-container h-[70%]`}
+        className={`hero-container h-full`}
       >
         <div className="hero-element">
           <TypeAnimation

@@ -44,7 +44,6 @@ const Player = ({ track }) => {
         // });
         if (currentSongIndex === 0) {
           getNextTrack();
-          console.log("next track", nextSong);
           setCurrentSongIndex((count) => count + 1);
         } else {
           setCurrentSongIndex((count) => count + 1);
