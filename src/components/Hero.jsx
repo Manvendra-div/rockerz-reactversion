@@ -115,9 +115,43 @@ const Hero = ({
       fetchSearchData(searchQuery.replace(/ /g, "+"));
     }
   };
-  const throwSearchRequestfromOptions = (recommendedsongName) => {
-    fetchSearchData(recommendedsongName.replace(/ /g, "+"));
-    setfinalSearchQuery(recommendedsongName);
+  const throwSearchRequestfromOptions = async (songId) => {
+    loadinFunc(true);
+    setTimeout(async () => {
+      setSongSectionData([]);
+      setdatafromSearchToggle(true);
+      const recommendedsong = (
+        await fetchData(`${BASE_API}/api/songs/${songId}`)
+      ).data;
+      const recommendedalbum = (
+        await fetchData(
+          `${BASE_API}/api/albums?id=${recommendedsong[0].album.id}`
+        )
+      ).data;
+      const recommendedsongName = recommendedsong[0].name;
+      const prepareArtistsArray = () => {
+        let artistsArray = [];
+        recommendedsong.forEach((song) => {
+          const stringNumbers = song.artists.primary[0].id;
+          const stringArray = stringNumbers.split(", ");
+          const numberArray = stringArray.map((str) => parseInt(str, 10));
+          artistsArray = artistsArray.concat(numberArray);
+        });
+        return artistsArray;
+      };
+      const formatedSearchdata = {
+        songs: recommendedsong,
+        albums: [recommendedalbum],
+        artists: prepareArtistsArray(),
+      };
+      setSongSectionData(formatedSearchdata);
+      loadinFunc(false);
+      setTimeout(() => {
+        setappearSongCard(true);
+      }, 150);
+      setfinalSearchQuery(recommendedsongName);
+      loadinFunc(false);
+    }, 100);
   };
   const finalSearchQueryFunc = () => {
     setfinalSearchQuery(searchQuery);
@@ -304,9 +338,7 @@ const Hero = ({
           contentOfCard={albumCardData}
         />
       )}
-      <div
-        className={`hero-container h-full`}
-      >
+      <div className={`hero-container h-full`}>
         <div className="hero-element">
           <TypeAnimation
             sequence={[
