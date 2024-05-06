@@ -8,6 +8,8 @@ import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
 import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../redux/LoadingSlice/loadinSlice.js";
 
 const fetchData = async (URL) => {
   try {
@@ -20,13 +22,13 @@ const fetchData = async (URL) => {
 
 const Hero = ({
   setTrack,
-  loadinFunc,
   toggleNotification,
   addNotifyContent,
   showPlayer,
   playnewsong,
   setplaynewsong,
 }) => {
+  const dispatch = useDispatch()
   const [songSectionData, setSongSectionData] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
@@ -39,7 +41,7 @@ const Hero = ({
   const fetchSearchData = async (e) => {
     setappearSongCard(false);
     finalSearchQueryFunc();
-    loadinFunc(true);
+    dispatch(startLoading());
     setdatafromSearchToggle(true);
     setTimeout(async () => {
       setSongSectionData([]);
@@ -65,7 +67,7 @@ const Hero = ({
         artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedSearchdata);
-      loadinFunc(false);
+      dispatch(stopLoading())
       setTimeout(() => {
         setappearSongCard(true);
       }, 150);
@@ -79,7 +81,7 @@ const Hero = ({
     }, 4000);
   };
   const fetchHomePage = async () => {
-    loadinFunc(false);
+    dispatch(stopLoading())
     // setdatafromSearchToggle(false);
     // setTimeout(async () => {
     //   const homepagedata = (
@@ -116,7 +118,7 @@ const Hero = ({
     }
   };
   const throwSearchRequestfromOptions = async (songId) => {
-    loadinFunc(true);
+    dispatch(startLoading())
     setTimeout(async () => {
       setSongSectionData([]);
       setdatafromSearchToggle(true);
@@ -145,12 +147,12 @@ const Hero = ({
         artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedSearchdata);
-      loadinFunc(false);
+      dispatch(stopLoading())
       setTimeout(() => {
         setappearSongCard(true);
       }, 150);
       setfinalSearchQuery(recommendedsongName);
-      loadinFunc(false);
+      dispatch(stopLoading());
     }, 100);
   };
   const finalSearchQueryFunc = () => {
@@ -167,7 +169,7 @@ const Hero = ({
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
   const fetchPlaylist = (id) => {
-    loadinFunc(true);
+    dispatch(startLoading())
     setTimeout(async () => {
       const searchfromId = (await fetchData(`${BASE_API}/api/albums?id=${id}`))
         .data;
@@ -192,7 +194,7 @@ const Hero = ({
       };
       setAlbumCardData(formatedSearchdata);
       setAlbumCardToggle(true);
-      loadinFunc(false);
+      dispatch(stopLoading())
     }, 100);
   };
   function debounce(func, timeout = 400) {
@@ -338,7 +340,7 @@ const Hero = ({
           contentOfCard={albumCardData}
         />
       )}
-      <div className={`hero-container h-full`}>
+      <div className={`hero-container h-full ${setdatafromSearchToggle ? "mt-10":"mt-0"}`}>
         <div className="hero-element">
           <TypeAnimation
             sequence={[
