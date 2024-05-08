@@ -3,9 +3,16 @@ import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaHistory } from "react-icons/fa";
+import { FcLike } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  doContract,
+  doExpand,
+} from "../redux/SideBarToggleSlice/SideBarToggleSlice";
 const SideBar = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const isExpanded = useSelector((state) => state.sideBarToggle.value);
   const buttonRef = useRef(null);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,31 +23,48 @@ const SideBar = () => {
   return (
     <aside
       className={`${
-        isExpanded ? "w-[45%] md:w-[20%]" : "w-[10%] md:w-[3%]"
-      } z-10 fixed top-24 flex justify-center items-center transition-all duration-300`}
+        isExpanded ? "w-[60%] md:w-[20%]" : "w-[15%] md:w-[6%]"
+      } z-10 fixed top-[30%] md:top-24 flex justify-center items-center transition-all duration-300`}
     >
-      <div className="backdrop-blur-xl bg-white/10 w-full rounded-r-md h-[30vh] md:h-[45vh]">
+      <div className="backdrop-blur-xl bg-white/10 w-full rounded-r-md px-2 py-1">
         <button
           className={`shadow-lg p-2 rounded-md ${
             isExpanded ? "m-2" : "m-0.5"
           } backdrop-blur-lg bg-black/60 hover:bg-black/80 w-[90%] flex justify-evenly items-center transition-all duration-300`}
-          onClick={isExpanded ? ()=>{} : () => setIsExpanded(!isExpanded)}
+          onClick={isExpanded ? () => {} : () => dispatch(doExpand())}
         >
           {isExpanded ? (
             <>
-              <FaGoogle /> Login with Google
+              <FaGoogle /> <p>Login with Google</p>
             </>
           ) : (
             <FaGoogle />
           )}
         </button>
-        <p className={`text-xs md:text-sm italic text-center ${isExpanded ? "block" : "hidden"}`}>login to enable features like <span className="text-red-400">Liked Songs</span> and <span className="text-blue-400">Last Session</span></p>
+        <p
+          className={`text-xs md:text-sm italic text-center ${
+            isExpanded ? "block" : "hidden"
+          }`}
+        >
+          login to enable features like
+          <div className="flex justify-evenly items-center text-red-400 not-italic font-semibold bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5">
+            <FcLike className="text-lg"/>
+            <p className="mt-1">Liked Songs</p>
+          </div>{" "}
+          <div className="flex justify-evenly items-center text-blue-400 not-italic font-semibold bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5">
+            <FaHistory className="text-lg"/> <p className="">Last Session</p>
+          </div>
+        </p>
       </div>
       <div className="relative flex justify-center items-center">
         <button
           ref={buttonRef}
           className="absolute -left-2 md:-left-4 text-2xl md:text-3xl"
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={
+            isExpanded
+              ? () => dispatch(doContract())
+              : () => dispatch(doExpand())
+          }
         >
           {isExpanded ? (
             <IoIosArrowDropleftCircle />

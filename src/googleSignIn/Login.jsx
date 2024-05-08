@@ -5,14 +5,14 @@ import { Transition } from "@headlessui/react";
 const Login = ({cardState,toggleFunc}) => {
   const [value, setvalue] = useState("");
   const handleGoogleClick = () => {
-    signInWithPopup(auth, provider).then((data) => {
-      setvalue(data.user.email);
-      console.log(data.user);
-      localStorage.setItem("email", data.user.email);
-    });
+    // signInWithPopup(auth, provider).then((data) => {
+    //   setvalue(data.user.email);
+    //   console.log(data.user);
+    //   localStorage.setItem("email", data.user.email);
+    // });
   };
   useEffect(() => {
-    setvalue(localStorage.getItem("email"));
+    setvalue(localStorage.removeItem("email"));
   }, []);
   return (
     <Transition
