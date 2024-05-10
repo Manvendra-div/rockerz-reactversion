@@ -10,6 +10,7 @@ import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
 import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../redux/LoadingSlice/loadinSlice.js";
+import { doContract } from "../redux/SideBarToggleSlice/SideBarToggleSlice.js";
 
 const fetchData = async (URL) => {
   try {
@@ -38,6 +39,9 @@ const Hero = ({
   const [appearSongCard, setappearSongCard] = useState(false);
   const [albumCardData, setAlbumCardData] = useState(null);
   const [albumCardToggle, setAlbumCardToggle] = useState(false);
+  const ContractSideBar = () => {
+    dispatch(doContract());
+  }
   const fetchSearchData = async (e) => {
     setappearSongCard(false);
     finalSearchQueryFunc();
@@ -374,7 +378,7 @@ const Hero = ({
               }}
             >
               <div className="relative flex flex-col justify-center items-center w-full">
-                <div className="input-container">
+                <div className="input-container" onClick={ContractSideBar}>
                   <Combobox.Input
                     className={"input-entry"}
                     placeholder="enter the keyword"
