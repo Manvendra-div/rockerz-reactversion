@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   doContract,
   doExpand,
-} from "../redux/SideBarToggleSlice/SideBarToggleSlice";
+} from "../redux/ToggleSlice/SideBarToggleSlice";
 const SideBar = () => {
   const dispatch = useDispatch();
   const isExpanded = useSelector((state) => state.sideBarToggle.value);
@@ -47,12 +47,12 @@ const SideBar = () => {
           }`}
         >
           login to enable features like
-          <div className="flex justify-evenly items-center text-red-400 not-italic font-semibold bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5">
-            <FcLike className="text-lg"/>
+          <div className="flex justify-evenly items-center text-red-400 not-italic font-semibold opacity-50 bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5 cursor-not-allowed">
+            <FcLike className="text-lg" />
             <p className="mt-1">Liked Songs</p>
           </div>{" "}
-          <div className="flex justify-evenly items-center text-blue-400 not-italic font-semibold bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5">
-            <FaHistory className="text-lg"/> <p className="">Last Session</p>
+          <div className="flex justify-evenly items-center text-blue-400 not-italic font-semibold opacity-50 bg-black/60 hover:bg-black/80 rounded-md px-14 my-1 py-1.5 cursor-not-allowed">
+            <FaHistory className="text-lg" /> <p className="mt-0.5">Last Session</p>
           </div>
         </p>
       </div>

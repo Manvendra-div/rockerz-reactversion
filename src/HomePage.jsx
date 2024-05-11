@@ -11,10 +11,9 @@ import Loading from "./components/LoadingAnimation";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const [currentTrack, setcurrentTrack] = useState(null);
-  const loadingState = useSelector((state) => state.loadingState.value)
+  const loadingState = useSelector((state) => state.loadingState.value);
+  const appearPlayer = useSelector((state) => state.player.value);
   const [isNotify, setIsNotifyVisible] = useState(false);
-  const [appearPlayer, setappearPlayer] = useState(false);
   const [triggerPlayernew, settriggerPlayernew] = useState(0);
   const [notifyContent, setNotifyContent] = useState("");
   const [loginPopup, setLoginPopup] = useState(false);
@@ -31,18 +30,14 @@ const HomePage = () => {
         )}
         <div className={`flex justify-between items-center w-full h-full`}>
           <SideBar />
-
           <Hero
-            setTrack={setcurrentTrack}
             toggleNotification={setIsNotifyVisible}
             addNotifyContent={setNotifyContent}
-            showPlayer={setappearPlayer}
             playnewsong={triggerPlayernew}
             setplaynewsong={settriggerPlayernew}
           />
         </div>
         {loadingState && <Loading />}
-
         <Transition
           show={appearPlayer}
           className="sticky bottom-0 z-20 w-full"
@@ -53,7 +48,7 @@ const HomePage = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Player track={currentTrack} />
+          <Player />
         </Transition>
 
         <Transition

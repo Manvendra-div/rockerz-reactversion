@@ -8,9 +8,11 @@ import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
 import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startLoading, stopLoading } from "../redux/LoadingSlice/loadinSlice.js";
-import { doContract } from "../redux/SideBarToggleSlice/SideBarToggleSlice.js";
+import { doContract } from "../redux/ToggleSlice/SideBarToggleSlice.js";
+import { setCurrentTrack } from "../redux/CurrentTrackSlice/CurrentTrackSlice.js";
+import { killPlayer, launchPlayer } from "../redux/ToggleSlice/PlayerToggleSlice.js";
 
 const fetchData = async (URL) => {
   try {
@@ -22,10 +24,8 @@ const fetchData = async (URL) => {
 };
 
 const Hero = ({
-  setTrack,
   toggleNotification,
   addNotifyContent,
-  showPlayer,
   playnewsong,
   setplaynewsong,
 }) => {
@@ -39,6 +39,7 @@ const Hero = ({
   const [appearSongCard, setappearSongCard] = useState(false);
   const [albumCardData, setAlbumCardData] = useState(null);
   const [albumCardToggle, setAlbumCardToggle] = useState(false);
+  const appearPlayer = useSelector((state) => state.player.value)
   const ContractSideBar = () => {
     dispatch(doContract());
   }
@@ -162,13 +163,12 @@ const Hero = ({
   const finalSearchQueryFunc = () => {
     setfinalSearchQuery(searchQuery);
   };
-  const launchPlayer = (data) => {
-    showPlayer(false);
+  const throwPlayer = (data) => {
     setAlbumCardToggle(false);
     setplaynewsong(playnewsong + 1);
+    dispatch(setCurrentTrack([data, playnewsong]));
     setTimeout(() => {
-      setTrack([data, playnewsong]);
-      showPlayer(true);
+      dispatch(launchPlayer());
     }, 200);
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
@@ -251,7 +251,7 @@ const Hero = ({
           <button
             className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
             onClick={() => {
-              launchPlayer(data);
+              throwPlayer(data);
             }}
           >
             <svg
@@ -499,7 +499,7 @@ const Hero = ({
                         <button
                           className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
                           onClick={() => {
-                            launchPlayer(songSectionData?.songs[0]);
+                            throwPlayer(songSectionData?.songs[0]);
                           }}
                         >
                           <svg

@@ -1,6 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
-import loadingReducer from "./LoadingSlice/loadinSlice";
-import SideBarToggleSlice from "./SideBarToggleSlice/SideBarToggleSlice";
-export const store = configureStore({
-  reducer: { loadingState: loadingReducer,sideBarToggle:SideBarToggleSlice },
-});
+import { createStore, applyMiddleware } from "redux";
+import { thunk } from "redux-thunk";
+import rootReducer from "./reducers";
+export const store = createStore(rootReducer, applyMiddleware(thunk));

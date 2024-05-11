@@ -26,6 +26,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-share": "^5.0.3",
     "react-type-animation": "^3.2.0",
+    "redux-thunk": "^3.1.0",
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {

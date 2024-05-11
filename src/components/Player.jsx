@@ -6,6 +6,7 @@ import { Transition } from "@headlessui/react";
 import Loading from "./LoadingAnimation";
 import parse from "html-react-parser";
 import BASE_API from "../BASE_API.js";
+import { useSelector } from "react-redux";
 
 const fetchData = async (URL) => {
   try {
@@ -16,7 +17,8 @@ const fetchData = async (URL) => {
   }
 };
 
-const Player = ({ track }) => {
+const Player = () => {
+  const track = useSelector((state) => state.currentTrack.value)
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -64,6 +66,7 @@ const Player = ({ track }) => {
     getTrackData(id);
   };
   useEffect(() => {
+    console.log(track);
     getTrackData(track[0].id);
   }, [track[1]]);
   useEffect(() => {
