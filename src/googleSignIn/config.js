@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {getAuth,GoogleAuthProvider} from "firebase/auth"
 const firebaseConfig = {
   apiKey: "AIzaSyB2SA8MfjS3jmaeWTIZmxWFEksZARAEqAs",
-  authDomain: "rockerzwebreact.netlify.app",
+  authDomain: "rockerz-web.firebaseapp.com",
   projectId: "rockerz-web",
   storageBucket: "rockerz-web.appspot.com",
   messagingSenderId: "59340405683",
