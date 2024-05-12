@@ -1,10 +1,10 @@
 import Brand from "../assets/Brand.svg";
 import { MdOutlineShare } from "react-icons/md";
-import ShareCard from "./ShareCard";
 import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { showPopup } from "../redux/LoginSlice/LoginPopupSlice";
+import DialogTemplate from "./Dialog";
+import { showDialog } from "../redux/ToggleSlice/DialogToggleSlice";
 const NavBar = ({ toggleNotification, addNotifyContent }) => {
   const dispatch = useDispatch();
   const [shareCardtoggle, setshareCardtoggle] = useState(false);
@@ -14,9 +14,7 @@ const NavBar = ({ toggleNotification, addNotifyContent }) => {
   }, []);
   return (
     <>
-      <ShareCard
-        toggleFunc={setshareCardtoggle}
-        cardState={shareCardtoggle}
+      <DialogTemplate
         pushNoti={toggleNotification}
         addContentNoti={addNotifyContent}
       />
@@ -34,15 +32,13 @@ const NavBar = ({ toggleNotification, addNotifyContent }) => {
           <a className="" href="/">
             <img src={Brand} className="w-[80%] hover:animate-pulse" alt="" />
           </a>
-          <div className="flex justify-between items-center w-[35%] md:w-[15%]">
-            <button
-              className="backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md px-4 py-2 rounded-md text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];"
-              onClick={() => setshareCardtoggle(true)}
-            >
-              <MdOutlineShare size={20} />
-            </button>
-            
-          </div>
+
+          <button
+            className="backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md px-4 py-2 rounded-md text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];"
+            onClick={() => dispatch(showDialog())}
+          >
+            <MdOutlineShare size={20} />
+          </button>
         </Transition>
       </div>
     </>

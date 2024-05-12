@@ -3,16 +3,51 @@ import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
-import { FaGoogle, FaHistory } from "react-icons/fa";
+import { FaGoogle, FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { doContract, doExpand } from "../redux/ToggleSlice/SideBarToggleSlice";
-import { showPopup } from "../redux/LoginSlice/LoginPopupSlice";
+import {
+  closeDialog,
+  setDialogData,
+  showDialog,
+} from "../redux/ToggleSlice/DialogToggleSlice";
+import { signInWithPopup } from "firebase/auth";
+import { setUser } from "../redux/LoginSlice/LoginSlice";
+import { auth, provider } from "../googleSignIn/config";
 const SideBar = () => {
   const dispatch = useDispatch();
   const isExpanded = useSelector((state) => state.sideBarToggle.value);
   const isLogined = useSelector((state) => state.loginState.user);
+  const [UIError,setUIError] = useState("")
   const buttonRef = useRef(null);
+  const handleGoogleClick = () => {
+    signInWithPopup(auth, provider).then((data) => {
+      dispatch(setUser(data.user));
+      dispatch(closeDialog())
+    }).catch((err) => {
+      setUIError(err.message)
+    });
+  };
+  const prepareGoogleLogin = () => {
+    dispatch(
+      setDialogData({
+        title: "Google Login",
+        content: (
+          <button className="flex justify-between items-center bg-gray-100 p-2 m-16 w-[60%] md:w-[33%] rounded-lg shadow-gray-600 text-black border-2 border-black" onClick={handleGoogleClick}>
+            <img
+              src="https://lh3.googleusercontent.com/C_Ty0alIJNrRQz5pNFmgA1rsRnhZDj67eVCCHXoJFFot0FQEZydARPRKbBADyHQoA0_Dj6gLITCshiJq6C-H-QM_U2mJwJZVLOQPnwvCL2RerGMEhw0"
+              alt="Google"
+              className="w-[20px]"
+            />
+            <p className="font-medium">|</p>
+            <p className="font-medium">Sign in with Google</p>
+          </button>
+        ),
+      })
+    );
+    dispatch(showDialog());
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       buttonRef.current.classList.toggle("animate-ping", !isExpanded);
@@ -29,20 +64,30 @@ const SideBar = () => {
         {isLogined ? (
           <div className="text-xs md:text-sm italic text-center">
             <button
-              className={`flex justify-evenly items-center text-red-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
+              className={`flex justify-center items-center text-red-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
               } my-1 py-1.5 w-full transition-all duration-300`}
             >
               <FcLike className={`${isExpanded ? "text-lg" : "text-2xl"}`} />
-              {isExpanded && <p className="md:mt-1">Liked Songs</p>}
+              {isExpanded && <p className="ml-2 md:mt-1">Liked Songs</p>}
             </button>{" "}
             <button
-              className={`flex justify-evenly items-center text-blue-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
+              className={`flex justify-center items-center text-blue-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
               } my-1 py-1.5 w-full transition-all duration-300`}
             >
               <FaHistory className={`${isExpanded ? "text-lg" : "text-2xl"}`} />{" "}
-              {isExpanded && <p className="md:mt-0.5">Last Session</p>}
+              {isExpanded && <p className="ml-2 md:mt-0.5">Last Session</p>}
+            </button>
+            <button
+              className={`flex justify-center items-center text-gray-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
+                isExpanded ? "px-12 md:px-14" : "px-3"
+              } my-1 py-1.5 w-full transition-all duration-300`}
+            >
+              <FaSignOutAlt
+                className={`${isExpanded ? "text-lg" : "text-2xl"}`}
+              />{" "}
+              {isExpanded && <p className="ml-2 md:mt-0.5">Log out</p>}
             </button>
           </div>
         ) : (
@@ -54,7 +99,7 @@ const SideBar = () => {
               onClick={
                 isExpanded
                   ? () => {
-                      dispatch(showPopup());
+                      prepareGoogleLogin();
                     }
                   : () => dispatch(doExpand())
               }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CiPlay1 } from "react-icons/ci";
 import { Transition, Combobox } from "@headlessui/react";
-import ShareCard from "./ShareCard";
+import ShareCard from "./Dialog.jsx";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
 import unavailable_img from "../assets/unavailable.svg";

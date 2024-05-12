@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import NavBar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import Login from "./googleSignIn/Login";
 import Hero from "./components/Hero";
 import { Transition } from "@headlessui/react";
 import Footer from "./components/Footer";
@@ -16,7 +15,6 @@ const HomePage = () => {
   const [isNotify, setIsNotifyVisible] = useState(false);
   const [triggerPlayernew, settriggerPlayernew] = useState(0);
   const [notifyContent, setNotifyContent] = useState("");
-  const loginPopup = useSelector((state) => state.loginpopup.value);
   return (
     <>
       <div className="flex flex-col justify-between items-center min-h-screen">
@@ -24,9 +22,6 @@ const HomePage = () => {
           toggleNotification={setIsNotifyVisible}
           addNotifyContent={setNotifyContent}
         />
-        {loginPopup && (
-          <Login cardState={loginPopup}/>
-        )}
         <div className={`flex justify-between items-center w-full h-full`}>
           <SideBar />
           <Hero
