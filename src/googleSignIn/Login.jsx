@@ -39,7 +39,7 @@ const Login = ({cardState}) => {
           e.stopPropagation();
         }}
       >
-      {value.email}
+      {value?.email}
       <button onClick={handleGoogleClick}>Sign In With Google</button></Transition.Child>
     </Transition>
   );
