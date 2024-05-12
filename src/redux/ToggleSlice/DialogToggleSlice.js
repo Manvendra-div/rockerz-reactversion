@@ -11,12 +11,14 @@ export const DialogToggleSlice = createSlice({
   initialState,
   reducers: {
     showDialog: (state) => {
+      state.title = undefined;
+      state.content = undefined;
       state.state = true;
     },
     closeDialog: (state) => {
-      state.state = false;
+        state.state = false;
     },
-    setDialogData: (state,action) => {
+    setDialogData: (state, action) => {
       state.title = action.payload.title;
       state.content = action.payload.content;
     },

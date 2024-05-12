@@ -7,7 +7,6 @@ import DialogTemplate from "./Dialog";
 import { showDialog } from "../redux/ToggleSlice/DialogToggleSlice";
 const NavBar = ({ toggleNotification, addNotifyContent }) => {
   const dispatch = useDispatch();
-  const [shareCardtoggle, setshareCardtoggle] = useState(false);
   const [navBrand, setnavBrand] = useState(false);
   useEffect(() => {
     setTimeout(() => setnavBrand(true), 100);

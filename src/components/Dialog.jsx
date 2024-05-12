@@ -83,11 +83,6 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
       className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0 left-0"
       onClick={() => {
         dispatch(closeDialog());
-        setTimeout(
-          () =>
-            dispatch(setDialogData({ title: undefined, content: undefined })),
-          300
-        );
       }}
     >
       <Transition.Child

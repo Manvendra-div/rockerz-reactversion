@@ -30,6 +30,7 @@ const SideBar = () => {
     });
   };
   const prepareGoogleLogin = () => {
+    dispatch(showDialog());
     dispatch(
       setDialogData({
         title: "Google Login",
@@ -46,7 +47,7 @@ const SideBar = () => {
         ),
       })
     );
-    dispatch(showDialog());
+
   };
   useEffect(() => {
     const interval = setInterval(() => {
