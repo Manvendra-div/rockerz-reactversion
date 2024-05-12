@@ -7,10 +7,13 @@ import { closePopup } from "../redux/LoginSlice/LoginPopupSlice";
 import { setUser } from "../redux/LoginSlice/LoginSlice";
 const Login = ({cardState}) => {
   const dispatch = useDispatch()
+  const [UIError,setUIError] = useState("")
   const value = useSelector((state)=>state.loginState.user)
   const handleGoogleClick = () => {
     signInWithPopup(auth, provider).then((data) => {
       dispatch(setUser(data.user));
+    }).catch((err) => {
+      setUIError(err.message)
     });
   };
   return (
@@ -40,6 +43,7 @@ const Login = ({cardState}) => {
         }}
       >
       {value?.email}
+      {UIError}
       <button onClick={handleGoogleClick}>Sign In With Google</button></Transition.Child>
     </Transition>
   );
