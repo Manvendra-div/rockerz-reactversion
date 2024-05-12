@@ -2,18 +2,17 @@ import React, { useEffect, useState } from "react";
 import { auth, provider } from "./config";
 import { signInWithPopup } from "firebase/auth";
 import { Transition } from "@headlessui/react";
-const Login = ({cardState,toggleFunc}) => {
-  const [value, setvalue] = useState("");
+import { useDispatch, useSelector } from "react-redux";
+import { closePopup } from "../redux/LoginSlice/LoginPopupSlice";
+import { setUser } from "../redux/LoginSlice/LoginSlice";
+const Login = ({cardState}) => {
+  const dispatch = useDispatch()
+  const value = useSelector((state)=>state.loginState.user)
   const handleGoogleClick = () => {
-    // signInWithPopup(auth, provider).then((data) => {
-    //   setvalue(data.user.email);
-    //   console.log(data.user);
-    //   localStorage.setItem("email", data.user.email);
-    // });
+    signInWithPopup(auth, provider).then((data) => {
+      dispatch(setUser(data.user));
+    });
   };
-  useEffect(() => {
-    setvalue(localStorage.removeItem("email"));
-  }, []);
   return (
     <Transition
       appear
@@ -25,7 +24,7 @@ const Login = ({cardState,toggleFunc}) => {
       leaveTo="opacity-0"
       className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0 left-0"
       onClick={() => {
-        toggleFunc(false);
+        dispatch(closePopup());
       }}
     >
         <Transition.Child
@@ -40,7 +39,7 @@ const Login = ({cardState,toggleFunc}) => {
           e.stopPropagation();
         }}
       >
-      {value}
+      {value.email}
       <button onClick={handleGoogleClick}>Sign In With Google</button></Transition.Child>
     </Transition>
   );

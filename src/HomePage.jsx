@@ -16,17 +16,16 @@ const HomePage = () => {
   const [isNotify, setIsNotifyVisible] = useState(false);
   const [triggerPlayernew, settriggerPlayernew] = useState(0);
   const [notifyContent, setNotifyContent] = useState("");
-  const [loginPopup, setLoginPopup] = useState(false);
+  const loginPopup = useSelector((state) => state.loginpopup.value);
   return (
     <>
       <div className="flex flex-col justify-between items-center min-h-screen">
         <NavBar
           toggleNotification={setIsNotifyVisible}
           addNotifyContent={setNotifyContent}
-          loginPopup={setLoginPopup}
         />
         {loginPopup && (
-          <Login cardState={loginPopup} toggleFunc={setLoginPopup} />
+          <Login cardState={loginPopup}/>
         )}
         <div className={`flex justify-between items-center w-full h-full`}>
           <SideBar />

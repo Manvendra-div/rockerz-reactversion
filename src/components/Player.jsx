@@ -66,7 +66,6 @@ const Player = () => {
     getTrackData(id);
   };
   useEffect(() => {
-    console.log(track);
     getTrackData(track[0].id);
   }, [track[1]]);
   useEffect(() => {

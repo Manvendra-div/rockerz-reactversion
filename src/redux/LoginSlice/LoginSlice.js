@@ -1,47 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { auth } from '../../googleSignIn/config'; // Import Firebase auth module
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null, // Initial user state is null
+  user: { email: "" },
 };
 
 export const LoginSlice = createSlice({
-  name: 'LoginSlice',
+  name: "LoginSlice",
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload; // Set user data to the state
+      state.user = action.payload;
     },
     clearUser: (state) => {
-      state.user = null; // Clear user data from the state
+      state.user = null;
     },
   },
 });
-
-// Action to handle Firebase Google sign-in
-export const signInWithGoogle = () => {
-  return async (dispatch) => {
-    try {
-      const provider = new auth.GoogleAuthProvider();
-      const result = await auth().signInWithPopup(provider);
-      dispatch(setUser(result.user)); // Dispatch setUser action with user data
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-    }
-  };
-};
-
-// Action to handle sign-out
-export const signOut = () => {
-  return async (dispatch) => {
-    try {
-      await auth().signOut();
-      dispatch(clearUser()); // Dispatch clearUser action to clear user data
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-};
 
 export const { setUser, clearUser } = LoginSlice.actions;
 

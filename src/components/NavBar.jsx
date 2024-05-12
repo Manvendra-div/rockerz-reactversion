@@ -3,7 +3,10 @@ import { MdOutlineShare } from "react-icons/md";
 import ShareCard from "./ShareCard";
 import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
-const NavBar = ({ toggleNotification, addNotifyContent,loginPopup }) => {
+import { useDispatch } from "react-redux";
+import { showPopup } from "../redux/LoginSlice/LoginPopupSlice";
+const NavBar = ({ toggleNotification, addNotifyContent }) => {
+  const dispatch = useDispatch();
   const [shareCardtoggle, setshareCardtoggle] = useState(false);
   const [navBrand, setnavBrand] = useState(false);
   useEffect(() => {
@@ -38,13 +41,8 @@ const NavBar = ({ toggleNotification, addNotifyContent,loginPopup }) => {
             >
               <MdOutlineShare size={20} />
             </button>
-            <button
-              className="backdrop-blur-lg bg-gray-500/20 hover:bg-gray-600/20 shadow-lg hover:active:shadow-md px-4 py-2 rounded-md text-white flex justify-center border focus-within:border-[#EA580C] focus-within:ring focus-within:ring-[#EA580C] focus-within:ring-opacity-40 dark:border-gray-700 dark:focus-within:border-[#EA580C];"
-              onClick={() => loginPopup(true)}
-            >
-              <MdOutlineShare size={20} />
-            </button>
-       </div>
+            
+          </div>
         </Transition>
       </div>
     </>
