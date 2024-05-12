@@ -23,7 +23,7 @@ const SideBar = () => {
     <aside
       className={`${
         isExpanded ? "w-[60%] md:w-[20%]" : "w-[15%] md:w-[6%]"
-      } z-10 fixed top-[30%] md:top-24 flex justify-center items-center transition-all duration-300`}
+      } z-10 fixed top-24 flex justify-center items-center transition-all duration-300`}
     >
       <div className="backdrop-blur-xl bg-white/10 w-full rounded-r-md px-2 py-1">
         {isLogined ? (
