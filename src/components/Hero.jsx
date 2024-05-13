@@ -9,10 +9,16 @@ import { NumericFormat } from "react-number-format";
 import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
 import { useDispatch, useSelector } from "react-redux";
-import { startLoading, stopLoading } from "../redux/LoadingSlice/loadinSlice.js";
+import {
+  startLoading,
+  stopLoading,
+} from "../redux/LoadingSlice/loadinSlice.js";
 import { doContract } from "../redux/ToggleSlice/SideBarToggleSlice.js";
 import { setCurrentTrack } from "../redux/CurrentTrackSlice/CurrentTrackSlice.js";
-import { killPlayer, launchPlayer } from "../redux/ToggleSlice/PlayerToggleSlice.js";
+import {
+  killPlayer,
+  launchPlayer,
+} from "../redux/ToggleSlice/PlayerToggleSlice.js";
 
 const fetchData = async (URL) => {
   try {
@@ -29,7 +35,7 @@ const Hero = ({
   playnewsong,
   setplaynewsong,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [songSectionData, setSongSectionData] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const [datafromSearchToggle, setdatafromSearchToggle] = useState(false);
@@ -39,10 +45,10 @@ const Hero = ({
   const [appearSongCard, setappearSongCard] = useState(false);
   const [albumCardData, setAlbumCardData] = useState(null);
   const [albumCardToggle, setAlbumCardToggle] = useState(false);
-  const appearPlayer = useSelector((state) => state.player.value)
+  const loginedUser = useSelector((state) => state.loginState.user);
   const ContractSideBar = () => {
     dispatch(doContract());
-  }
+  };
   const fetchSearchData = async (e) => {
     setappearSongCard(false);
     finalSearchQueryFunc();
@@ -72,7 +78,7 @@ const Hero = ({
         artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedSearchdata);
-      dispatch(stopLoading())
+      dispatch(stopLoading());
       setTimeout(() => {
         setappearSongCard(true);
       }, 150);
@@ -86,7 +92,7 @@ const Hero = ({
     }, 4000);
   };
   const fetchHomePage = async () => {
-    dispatch(stopLoading())
+    dispatch(stopLoading());
     // setdatafromSearchToggle(false);
     // setTimeout(async () => {
     //   const homepagedata = (
@@ -123,7 +129,7 @@ const Hero = ({
     }
   };
   const throwSearchRequestfromOptions = async (songId) => {
-    dispatch(startLoading())
+    dispatch(startLoading());
     setTimeout(async () => {
       setSongSectionData([]);
       setdatafromSearchToggle(true);
@@ -152,7 +158,7 @@ const Hero = ({
         artists: prepareArtistsArray(),
       };
       setSongSectionData(formatedSearchdata);
-      dispatch(stopLoading())
+      dispatch(stopLoading());
       setTimeout(() => {
         setappearSongCard(true);
       }, 150);
@@ -173,7 +179,7 @@ const Hero = ({
     // setPlaylist((prevPlaylist) => [...prevPlaylist, data]);
   };
   const fetchPlaylist = (id) => {
-    dispatch(startLoading())
+    dispatch(startLoading());
     setTimeout(async () => {
       const searchfromId = (await fetchData(`${BASE_API}/api/albums?id=${id}`))
         .data;
@@ -198,7 +204,7 @@ const Hero = ({
       };
       setAlbumCardData(formatedSearchdata);
       setAlbumCardToggle(true);
-      dispatch(stopLoading())
+      dispatch(stopLoading());
     }, 100);
   };
   function debounce(func, timeout = 400) {
@@ -344,7 +350,11 @@ const Hero = ({
           contentOfCard={albumCardData}
         />
       )}
-      <div className={`hero-container h-full ${setdatafromSearchToggle ? "mt-10":"mt-0"}`}>
+      <div
+        className={`hero-container h-full ${
+          setdatafromSearchToggle ? "mt-10" : "mt-0"
+        }`}
+      >
         <div className="hero-element">
           <TypeAnimation
             sequence={[
@@ -426,6 +436,16 @@ const Hero = ({
                 </Combobox.Options>
               </div>
             </Combobox>
+            {loginedUser === null || datafromSearchToggle ? (
+              ""
+            ) : (
+              <div className="flex justify-center items-center w-full p-5 text-xl font-bold">
+                Hey,
+                <p className="ml-2 text-[#EA580C]">
+                  {loginedUser.displayName.split(" ")[0]}
+                </p>
+              </div>
+            )}
           </Transition>
         </div>
         {datafromSearchToggle && (

@@ -12,22 +12,31 @@ import {
   setDialogData,
   showDialog,
 } from "../redux/ToggleSlice/DialogToggleSlice";
-import { signInWithPopup } from "firebase/auth";
-import { setUser } from "../redux/LoginSlice/LoginSlice";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { clearUser, setUser } from "../redux/LoginSlice/LoginSlice";
 import { auth, provider } from "../googleSignIn/config";
 const SideBar = () => {
   const dispatch = useDispatch();
   const isExpanded = useSelector((state) => state.sideBarToggle.value);
   const isLogined = useSelector((state) => state.loginState.user);
-  const [UIError,setUIError] = useState("")
+  const [UIError, setUIError] = useState("");
   const buttonRef = useRef(null);
   const handleGoogleClick = () => {
-    signInWithPopup(auth, provider).then((data) => {
-      dispatch(setUser(data.user));
-      dispatch(closeDialog())
-    }).catch((err) => {
-      setUIError(err.message)
-    });
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        dispatch(setUser(data.user));
+        dispatch(closeDialog());
+      })
+      .catch((err) => {
+        setUIError(err.message);
+      });
+  };
+  const SignOut = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(clearUser());
+      })
+      .catch((error) => {});
   };
   const prepareGoogleLogin = () => {
     dispatch(showDialog());
@@ -35,7 +44,10 @@ const SideBar = () => {
       setDialogData({
         title: "Google Login",
         content: (
-          <button className="flex justify-between items-center bg-gray-100 p-2 m-16 w-[60%] md:w-[33%] rounded-lg shadow-gray-600 text-black border-2 border-black" onClick={handleGoogleClick}>
+          <button
+            className="flex justify-between items-center bg-gray-100 p-2 m-16 w-[60%] md:w-[33%] rounded-lg shadow-gray-600 text-black border-2 border-black"
+            onClick={handleGoogleClick}
+          >
             <img
               src="https://lh3.googleusercontent.com/C_Ty0alIJNrRQz5pNFmgA1rsRnhZDj67eVCCHXoJFFot0FQEZydARPRKbBADyHQoA0_Dj6gLITCshiJq6C-H-QM_U2mJwJZVLOQPnwvCL2RerGMEhw0"
               alt="Google"
@@ -47,7 +59,6 @@ const SideBar = () => {
         ),
       })
     );
-
   };
   useEffect(() => {
     const interval = setInterval(() => {
@@ -84,6 +95,7 @@ const SideBar = () => {
               className={`flex justify-center items-center text-gray-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
               } my-1 py-1.5 w-full transition-all duration-300`}
+              onClick={SignOut}
             >
               <FaSignOutAlt
                 className={`${isExpanded ? "text-lg" : "text-2xl"}`}
