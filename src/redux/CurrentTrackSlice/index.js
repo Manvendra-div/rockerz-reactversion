@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: [{
+  trackData: {
     id: "",
     name: "",
     type: "song",
@@ -71,7 +71,8 @@ const initialState = {
         url: "",
       },
     ],
-  },0],
+  },
+  trackIndex:0
 };
 
 export const CurrentTrackSlice = createSlice({
@@ -79,7 +80,8 @@ export const CurrentTrackSlice = createSlice({
   initialState,
   reducers: {
     setCurrentTrack: (state, action) => {
-      state.value = action.payload;
+      state.trackData = action.payload.trackData;
+      state.trackIndex = action.payload.trackIndex;
     },
   },
 });

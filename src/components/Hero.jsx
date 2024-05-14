@@ -3,22 +3,24 @@ import { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CiPlay1 } from "react-icons/ci";
 import { Transition, Combobox } from "@headlessui/react";
-import ShareCard from "./Dialog.jsx";
 import parse from "html-react-parser";
 import { NumericFormat } from "react-number-format";
-import unavailable_img from "../assets/unavailable.svg";
 import BASE_API from "../BASE_API.js";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  startLoading,
-  stopLoading,
-} from "../redux/LoadingSlice/loadinSlice.js";
+import { startLoading, stopLoading } from "../redux/LoadingSlice";
 import { doContract } from "../redux/ToggleSlice/SideBarToggleSlice.js";
-import { setCurrentTrack } from "../redux/CurrentTrackSlice/CurrentTrackSlice.js";
+import { setCurrentTrack } from "../redux/CurrentTrackSlice";
+import { launchPlayer } from "../redux/ToggleSlice/PlayerToggleSlice.js";
+import SongCard from "./SongCard.jsx";
 import {
-  killPlayer,
-  launchPlayer,
-} from "../redux/ToggleSlice/PlayerToggleSlice.js";
+  setDialogData,
+  showDialog,
+} from "../redux/ToggleSlice/DialogToggleSlice.js";
+import { FcLike } from "react-icons/fc";
+import {
+  addIDtoFavourites,
+  removeIDfromFavourites,
+} from "../redux/FavouritesTracksSlice/index.js";
 
 const fetchData = async (URL) => {
   try {
@@ -43,9 +45,8 @@ const Hero = ({
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
   const [showInputField, setshowInputField] = useState(false);
   const [appearSongCard, setappearSongCard] = useState(false);
-  const [albumCardData, setAlbumCardData] = useState(null);
-  const [albumCardToggle, setAlbumCardToggle] = useState(false);
   const loginedUser = useSelector((state) => state.loginState.user);
+  const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const ContractSideBar = () => {
     dispatch(doContract());
   };
@@ -170,9 +171,8 @@ const Hero = ({
     setfinalSearchQuery(searchQuery);
   };
   const throwPlayer = (data) => {
-    setAlbumCardToggle(false);
     setplaynewsong(playnewsong + 1);
-    dispatch(setCurrentTrack([data, playnewsong]));
+    dispatch(setCurrentTrack({ trackData: data, trackIndex: playnewsong }));
     setTimeout(() => {
       dispatch(launchPlayer());
     }, 200);
@@ -183,27 +183,27 @@ const Hero = ({
     setTimeout(async () => {
       const searchfromId = (await fetchData(`${BASE_API}/api/albums?id=${id}`))
         .data;
-      const compiledSongCards = (
-        <div
-          className={`${
-            searchfromId.songs.length >= 3
-              ? "overflow-y-scroll"
-              : "overflow-hidden"
-          } max-h-[500px] md:max-h-[300px] px-2 w-full`}
-        >
-          {searchfromId.songs.map((song, index) => (
-            <SongCard data={song} key={index} index={index} />
-          ))}
-        </div>
+      dispatch(showDialog());
+      dispatch(
+        setDialogData({
+          title: `${searchfromId.name} | ${parse(
+            searchfromId.artists.primary.map((name) => name.name).join(", ")
+          )}`,
+          content: (
+            <div
+              className={`${
+                searchfromId.songs.length >= 3
+                  ? "overflow-y-scroll"
+                  : "overflow-hidden"
+              } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+            >
+              {searchfromId.songs.map((song, index) => (
+                <SongCard data={song} key={index} index={index} />
+              ))}
+            </div>
+          ),
+        })
       );
-      const formatedSearchdata = {
-        title: `${searchfromId.name} | ${parse(
-          searchfromId.artists.primary.map((name) => name.name).join(", ")
-        )}`,
-        content: compiledSongCards,
-      };
-      setAlbumCardData(formatedSearchdata);
-      setAlbumCardToggle(true);
       dispatch(stopLoading());
     }, 100);
   };
@@ -216,77 +216,7 @@ const Hero = ({
       }, timeout);
     };
   }
-  const SongCard = ({ data, index }) => {
-    return (
-      <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5 border border-gray-400 select-none">
-        <img
-          src={data.image[1].url}
-          key={index}
-          className="w-[30%] md:w-[15%] h-auto object-cover transition-transform transform group-hover:scale-105"
-          alt="Song Image"
-        />
-        <div className="p-3 overflow-x-hidden whitespace-nowrap">
-          <h3
-            className={`text-lg font-semibold mb-1 ${
-              data?.name.length > 20 ? "group-hover:animate-marquee" : ""
-            }`}
-          >
-            {`${parse(data.name)}`}
-          </h3>
-          <p className="text-sm">
-            {parse(data.artists.primary.map((name) => name.name).join(", "))}
-          </p>
-        </div>
-        <div className="absolute bg-black rounded bg-opacity-0 group-hover:bg-opacity-60 w-full h-full top-0 left-0 flex items-center group-hover:opacity-100 transition justify-evenly">
-          <button
-            className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
-            onClick={pushNotificationForLike}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              className="bi bi-heart"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-            </svg>
-          </button>
 
-          <button
-            className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
-            onClick={() => {
-              throwPlayer(data);
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
-              fill="currentColor"
-              className="bi bi-play-circle-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
-            </svg>
-          </button>
-
-          <span className="flex flex-col w-[10%] items-center hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition">
-            <CiPlay1 size={20} />
-            <span className="text-xs">
-              <NumericFormat
-                value={data.playCount}
-                displayType={"text"}
-                allowLeadingZeros
-                thousandSeparator=","
-              />
-            </span>
-          </span>
-        </div>
-      </div>
-    );
-  };
   const AlbumsCard = ({ data, index }) => {
     return (
       <div className="w-[30%] md:w-[15%] cursor-pointer mx-1 md:mx-2 mb-3 relative rounded-md overflow-hidden m-1 group backdrop-blur-lg bg-white/5  border border-gray-400 select-none">
@@ -343,13 +273,6 @@ const Hero = ({
 
   return (
     <>
-      {albumCardToggle && (
-        <ShareCard
-          toggleFunc={setAlbumCardToggle}
-          cardState={albumCardToggle}
-          contentOfCard={albumCardData}
-        />
-      )}
       <div
         className={`hero-container h-full ${
           setdatafromSearchToggle ? "mt-10" : "mt-0"
@@ -502,19 +425,33 @@ const Hero = ({
                         <button
                           className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
                           onClick={() => {
-                            pushNotificationForLike();
+                            likedTracks.includes(songSectionData.songs[0]?.id)
+                              ? dispatch(
+                                  removeIDfromFavourites(
+                                    songSectionData.songs[0]?.id
+                                  )
+                                )
+                              : dispatch(
+                                  addIDtoFavourites(
+                                    songSectionData.songs[0]?.id
+                                  )
+                                );
                           }}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            className="bi bi-heart"
-                            viewBox="0 0 16 16"
-                          >
-                            <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                          </svg>
+                          {likedTracks.includes(songSectionData.songs[0]?.id) ? (
+                            <FcLike className="text-2xl" />
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              fill="currentColor"
+                              className="bi bi-heart"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                            </svg>
+                          )}
                         </button>
                         <button
                           className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"

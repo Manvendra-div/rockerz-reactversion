@@ -6,7 +6,8 @@ import { Transition } from "@headlessui/react";
 import Loading from "./LoadingAnimation";
 import parse from "html-react-parser";
 import BASE_API from "../BASE_API.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addIDtoLastSession } from "../redux/LastSessionSlice/index.js";
 
 const fetchData = async (URL) => {
   try {
@@ -18,13 +19,15 @@ const fetchData = async (URL) => {
 };
 
 const Player = () => {
-  const track = useSelector((state) => state.currentTrack.value)
+  const track = useSelector((state) => state.currentTrack.trackData);
+  const trackIndex = useSelector((state) => state.currentTrack.trackIndex);
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playerData, setPlayerData] = useState(null);
   const [isfromHero, setIsfromHero] = useState(false);
+  const dispatch = useDispatch();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [nextSong, setNextSong] = useState([]);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
@@ -63,11 +66,13 @@ const Player = () => {
 
   const setNewTrack = (id) => {
     setIsfromHero(false);
+    dispatch(addIDtoLastSession(id));
     getTrackData(id);
   };
   useEffect(() => {
-    getTrackData(track[0].id);
-  }, [track[1]]);
+    getTrackData(track.id);
+    dispatch(addIDtoLastSession(track.id));
+  }, [trackIndex]);
   useEffect(() => {
     if (audioRef.current && isPlaying) {
       audioRef.current.play();

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa6";
 import parse from "html-react-parser";
@@ -17,10 +17,7 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Transition } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  closeDialog,
-  setDialogData,
-} from "../redux/ToggleSlice/DialogToggleSlice";
+import { closeDialog } from "../redux/ToggleSlice/DialogToggleSlice";
 const shareData = `
 🎵 Explore Rockerz WEB
 
@@ -101,12 +98,12 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
           <span className="font-semibold text-sm md:text-lg m-3 overflow-x-hidden whitespace-nowrap w-[80%]">
             <p
               className={`${
-                contentOfCard === undefined
+                externalTitle === "Last Session" ||  externalTitle === "Favourites"
                   ? cardContent?.title
                   : contentOfCard?.title
               }`}
             >
-              {contentOfCard === undefined
+              {externalTitle === undefined
                 ? parse(cardContent.title)
                 : parse(externalTitle)}
             </p>
@@ -119,9 +116,18 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
             }}
           />
         </div>
-
         <div className="my-3 py-4 backdrop-blur-sm bg-black/30 border-y-[1px] border-black flex flex-wrap justify-center items-center w-full">
-          {contentOfCard === undefined ? cardContent.content : contentOfCard}
+          {externalTitle === undefined ? cardContent.content : contentOfCard}
+          <p
+            className={`${
+              (externalTitle === "Last Session" || externalTitle === "Favourites") &&
+                contentOfCard === undefined
+                ? "block"
+                : "hidden"
+            } text-gray-400 text-3xl font-semibold p-3 opacity-80`}
+          >
+            Nothing to see here
+          </p>
         </div>
         <span className="p-3 text-sm xl:text-xl">
           Made with ❤️ by{" "}

@@ -7,18 +7,37 @@ import { FaGoogle, FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { doContract, doExpand } from "../redux/ToggleSlice/SideBarToggleSlice";
+import axios from "axios";
 import {
   closeDialog,
   setDialogData,
   showDialog,
 } from "../redux/ToggleSlice/DialogToggleSlice";
 import { signInWithPopup, signOut } from "firebase/auth";
-import { clearUser, setUser } from "../redux/LoginSlice/LoginSlice";
+import { clearUser, setUser } from "../redux/LoginSlice";
 import { auth, provider } from "../googleSignIn/config";
+import BASE_API from "../BASE_API";
+import SongCard from "./SongCard";
+
+const fetchData = async (URL) => {
+  try {
+    const response = await axios.get(URL);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+const getSongDataByID = async (id) => {
+  const trackData = await fetchData(`${BASE_API}/api/songs/${id}`);
+  return trackData.data[0];
+};
 const SideBar = () => {
   const dispatch = useDispatch();
   const isExpanded = useSelector((state) => state.sideBarToggle.value);
   const isLogined = useSelector((state) => state.loginState.user);
+  const lastSession = useSelector((state) => state.lastSession.value);
+  const likedTracks = useSelector((state) => state.favouriteTrack.value)
   const [UIError, setUIError] = useState("");
   const buttonRef = useRef(null);
   const handleGoogleClick = () => {
@@ -60,6 +79,88 @@ const SideBar = () => {
       })
     );
   };
+  const prepareLastSessionPopup = async () => {
+    try {
+      const sessionData = await Promise.all(
+        lastSession.map(async (element, index) => {
+          const trackData = await getSongDataByID(element);
+          return trackData;
+        })
+      );
+      sessionData.reverse();
+      dispatch(showDialog());
+      if (sessionData.length > 0) {
+        dispatch(
+          setDialogData({
+            title: "Last Session",
+            content: (
+              <div
+                className={`${
+                  sessionData.length >= 3
+                    ? "overflow-y-auto"
+                    : "overflow-hidden"
+                } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+              >
+                {sessionData.map((track, index) => (
+                  <SongCard data={track} key={index} index={index} />
+                ))}
+              </div>
+            ),
+          })
+        );
+      } else {
+        dispatch(
+          setDialogData({
+            title: "Last Session",
+            content: undefined,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error preparing last session popup:", error);
+    }
+  };
+  const prepareFavouritesPopup = async () => {
+    try {
+      const sessionData = await Promise.all(
+        likedTracks.map(async (element, index) => {
+          const trackData = await getSongDataByID(element);
+          return trackData;
+        })
+      );
+      sessionData.reverse();
+      dispatch(showDialog());
+      if (sessionData.length > 0) {
+        dispatch(
+          setDialogData({
+            title: "Favourites",
+            content: (
+              <div
+                className={`${
+                  sessionData.length >= 3
+                    ? "overflow-y-auto"
+                    : "overflow-hidden"
+                } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+              >
+                {sessionData.map((track, index) => (
+                  <SongCard data={track} key={index} index={index} />
+                ))}
+              </div>
+            ),
+          })
+        );
+      } else {
+        dispatch(
+          setDialogData({
+            title: "Favourites",
+            content: undefined,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error preparing last session popup:", error);
+    }
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       buttonRef.current.classList.toggle("animate-ping", !isExpanded);
@@ -78,7 +179,7 @@ const SideBar = () => {
             <button
               className={`flex justify-center items-center text-red-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
-              } my-1 py-1.5 w-full transition-all duration-300`}
+              } my-1 py-1.5 w-full transition-all duration-300`} onClick={prepareFavouritesPopup}
             >
               <FcLike className={`${isExpanded ? "text-lg" : "text-2xl"}`} />
               {isExpanded && <p className="ml-2 md:mt-1">Liked Songs</p>}
@@ -87,6 +188,7 @@ const SideBar = () => {
               className={`flex justify-center items-center text-blue-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
               } my-1 py-1.5 w-full transition-all duration-300`}
+              onClick={prepareLastSessionPopup}
             >
               <FaHistory className={`${isExpanded ? "text-lg" : "text-2xl"}`} />{" "}
               {isExpanded && <p className="ml-2 md:mt-0.5">Last Session</p>}

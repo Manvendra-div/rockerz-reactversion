@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import SideBarToggleSlice from './ToggleSlice/SideBarToggleSlice';
-import  loadingSlice  from './LoadingSlice/loadinSlice';
-import CurrentTrackSlice from './CurrentTrackSlice/CurrentTrackSlice';
+import  loadingSlice  from './LoadingSlice';
+import CurrentTrackSlice from './CurrentTrackSlice';
 import PlayerToggleSlice from './ToggleSlice/PlayerToggleSlice';
-import LoginSlice from './LoginSlice/LoginSlice';
+import LoginSlice from './LoginSlice';
 import DialogToggleSlice from './ToggleSlice/DialogToggleSlice';
+import LastSessionSlice from './LastSessionSlice';
+import FavouritesTracksSlice from './FavouritesTracksSlice';
 
 const rootReducer = combineReducers({
     loadingState: loadingSlice,
@@ -12,7 +14,9 @@ const rootReducer = combineReducers({
     sideBarToggle: SideBarToggleSlice,
     currentTrack: CurrentTrackSlice,
     loginState:LoginSlice,
-    dialogSlice:DialogToggleSlice
+    dialogSlice:DialogToggleSlice,
+    lastSession:LastSessionSlice,
+    favouriteTrack:FavouritesTracksSlice,
 });
 
 export default rootReducer;
