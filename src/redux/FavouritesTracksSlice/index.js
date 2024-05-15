@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const FavouriteTrackSlice = createSlice({
-  name: "LastSession",
+  name: "Favourites",
   initialState,
   reducers: {
     addIDtoFavourites: (state, action) => {

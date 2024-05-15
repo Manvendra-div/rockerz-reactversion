@@ -15,29 +15,17 @@ import {
 } from "../redux/ToggleSlice/DialogToggleSlice";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { clearUser, setUser } from "../redux/LoginSlice";
-import { auth, provider } from "../googleSignIn/config";
+import { auth, provider } from "../firebase/config";
 import BASE_API from "../BASE_API";
 import SongCard from "./SongCard";
+import { getSongDataByID } from "../utils/getSongDataByID";
 
-const fetchData = async (URL) => {
-  try {
-    const response = await axios.get(URL);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-const getSongDataByID = async (id) => {
-  const trackData = await fetchData(`${BASE_API}/api/songs/${id}`);
-  return trackData.data[0];
-};
 const SideBar = () => {
   const dispatch = useDispatch();
   const isExpanded = useSelector((state) => state.sideBarToggle.value);
   const isLogined = useSelector((state) => state.loginState.user);
   const lastSession = useSelector((state) => state.lastSession.value);
-  const likedTracks = useSelector((state) => state.favouriteTrack.value)
+  const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const [UIError, setUIError] = useState("");
   const buttonRef = useRef(null);
   const handleGoogleClick = () => {
@@ -179,7 +167,8 @@ const SideBar = () => {
             <button
               className={`flex justify-center items-center text-red-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"
-              } my-1 py-1.5 w-full transition-all duration-300`} onClick={prepareFavouritesPopup}
+              } my-1 py-1.5 w-full transition-all duration-300`}
+              onClick={prepareFavouritesPopup}
             >
               <FcLike className={`${isExpanded ? "text-lg" : "text-2xl"}`} />
               {isExpanded && <p className="ml-2 md:mt-1">Liked Songs</p>}
@@ -193,6 +182,9 @@ const SideBar = () => {
               <FaHistory className={`${isExpanded ? "text-lg" : "text-2xl"}`} />{" "}
               {isExpanded && <p className="ml-2 md:mt-0.5">Last Session</p>}
             </button>
+            <div className="w-full p-2 flex justify-center items-center">
+              <div className="bg-gray-500 w-[80%] h-[1px]"></div>
+            </div>
             <button
               className={`flex justify-center items-center text-gray-400 not-italic font-semibold bg-black/40 hover:bg-black/80 rounded-md ${
                 isExpanded ? "px-12 md:px-14" : "px-3"

@@ -7,6 +7,7 @@ import LoginSlice from './LoginSlice';
 import DialogToggleSlice from './ToggleSlice/DialogToggleSlice';
 import LastSessionSlice from './LastSessionSlice';
 import FavouritesTracksSlice from './FavouritesTracksSlice';
+import AutoPlayChainSlice from './AutoPlayChainSlice';
 
 const rootReducer = combineReducers({
     loadingState: loadingSlice,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     dialogSlice:DialogToggleSlice,
     lastSession:LastSessionSlice,
     favouriteTrack:FavouritesTracksSlice,
+    nextSongchain:AutoPlayChainSlice
 });
 
 export default rootReducer;

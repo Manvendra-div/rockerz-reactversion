@@ -9,12 +9,14 @@ import {
   removeIDfromFavourites,
 } from "../redux/FavouritesTracksSlice";
 import { FcLike } from "react-icons/fc";
+import { closeDialog } from "../redux/ToggleSlice/DialogToggleSlice";
 
 const SongCard = ({ data, index }) => {
   const dispatch = useDispatch();
   const playnewsong = useSelector((state) => state.currentTrack.trackIndex);
   const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const throwPlayer = (song) => {
+    dispatch(closeDialog())
     dispatch(setCurrentTrack({ trackData: song, trackIndex: playnewsong + 1 }));
     setTimeout(() => {
       dispatch(launchPlayer());

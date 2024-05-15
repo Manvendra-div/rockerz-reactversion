@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import BASE_API from "../BASE_API.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addIDtoLastSession } from "../redux/LastSessionSlice/index.js";
+import { updateAutoPlay } from "../redux/AutoPlayChainSlice/index.js";
 
 const fetchData = async (URL) => {
   try {
@@ -29,18 +30,18 @@ const Player = () => {
   const [isfromHero, setIsfromHero] = useState(false);
   const dispatch = useDispatch();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [nextSong, setNextSong] = useState([]);
+  const nextSong = useSelector((state) => state.nextSongchain.value);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
   const getTrackData = async (Trackid) => {
     try {
       const trackData = await fetchData(`${BASE_API}/api/songs/${Trackid}`);
       const songData = trackData?.data[0];
       const getNextTrack = async () => {
-        setNextSong([]);
+        dispatch(updateAutoPlay([]))
         const nexttrack = await fetchData(
           `${BASE_API}/api/songs/${songData.id}/suggestions`
         );
-        setNextSong(nexttrack.data);
+        dispatch(updateAutoPlay(nexttrack.data))
       };
       if (songData) {
         // setCurrentSongIndex(currentSongIndex + 1);
