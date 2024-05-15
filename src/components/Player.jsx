@@ -9,6 +9,7 @@ import BASE_API from "../BASE_API.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addIDtoLastSession } from "../redux/LastSessionSlice/index.js";
 import { updateAutoPlay } from "../redux/AutoPlayChainSlice/index.js";
+import { updateDB } from "../utils/FirestoreManager.js";
 
 const fetchData = async (URL) => {
   try {
@@ -22,12 +23,13 @@ const fetchData = async (URL) => {
 const Player = () => {
   const track = useSelector((state) => state.currentTrack.trackData);
   const trackIndex = useSelector((state) => state.currentTrack.trackIndex);
+  const lastSession = useSelector((state) => state.lastSession.value);
+  const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playerData, setPlayerData] = useState(null);
-  const [isfromHero, setIsfromHero] = useState(false);
   const dispatch = useDispatch();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const nextSong = useSelector((state) => state.nextSongchain.value);
@@ -37,11 +39,11 @@ const Player = () => {
       const trackData = await fetchData(`${BASE_API}/api/songs/${Trackid}`);
       const songData = trackData?.data[0];
       const getNextTrack = async () => {
-        dispatch(updateAutoPlay([]))
+        dispatch(updateAutoPlay([]));
         const nexttrack = await fetchData(
           `${BASE_API}/api/songs/${songData.id}/suggestions`
         );
-        dispatch(updateAutoPlay(nexttrack.data))
+        dispatch(updateAutoPlay(nexttrack.data));
       };
       if (songData) {
         // setCurrentSongIndex(currentSongIndex + 1);
@@ -66,13 +68,28 @@ const Player = () => {
   };
 
   const setNewTrack = (id) => {
-    setIsfromHero(false);
     dispatch(addIDtoLastSession(id));
+    setTimeout(
+      () =>
+        updateDB({
+          favourites: likedTracks,
+          lastSession: lastSession,
+        }),
+      200
+    );
     getTrackData(id);
   };
   useEffect(() => {
     getTrackData(track.id);
     dispatch(addIDtoLastSession(track.id));
+    setTimeout(
+      () =>
+        updateDB({
+          favourites: likedTracks,
+          lastSession: lastSession,
+        }),
+      200
+    );
   }, [trackIndex]);
   useEffect(() => {
     if (audioRef.current && isPlaying) {

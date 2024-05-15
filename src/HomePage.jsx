@@ -8,6 +8,7 @@ import Player from "./components/Player";
 import Notify from "./components/Notify";
 import Loading from "./components/LoadingAnimation";
 import { useSelector } from "react-redux";
+import { getFavourites } from "./utils/FirestoreManager";
 
 const HomePage = () => {
   const loadingState = useSelector((state) => state.loadingState.value);

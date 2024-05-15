@@ -7,7 +7,6 @@ import { FaGoogle, FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { doContract, doExpand } from "../redux/ToggleSlice/SideBarToggleSlice";
-import axios from "axios";
 import {
   closeDialog,
   setDialogData,
@@ -16,9 +15,11 @@ import {
 import { signInWithPopup, signOut } from "firebase/auth";
 import { clearUser, setUser } from "../redux/LoginSlice";
 import { auth, provider } from "../firebase/config";
-import BASE_API from "../BASE_API";
 import SongCard from "./SongCard";
 import { getSongDataByID } from "../utils/getSongDataByID";
+import { updateFavouritesRedux } from "../redux/FavouritesTracksSlice";
+import { getFavourites, getLastSession } from "../utils/FirestoreManager";
+import { updateLastSessionRedux } from "../redux/LastSessionSlice";
 
 const SideBar = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,14 @@ const SideBar = () => {
         setUIError(err.message);
       });
   };
+  useEffect(() => {
+    getFavourites().then((data) => {
+      dispatch(updateFavouritesRedux(data));
+    });
+    getLastSession().then((data) => {
+      dispatch(updateLastSessionRedux(data));
+    });
+  }, []);
   const SignOut = () => {
     signOut(auth)
       .then(() => {

@@ -270,7 +270,14 @@ const Hero = ({
       setRecommendation([]);
     }
   };
-
+  const addToFavourites = (id) => {
+    dispatch(addIDtoFavourites(id));
+    updateDB({ favourites: likedTracks, lastSession: lastSession })
+  };
+  const removeFromFavourites = (id) => {
+    dispatch(removeIDfromFavourites(id));
+    updateDB({ favourites: likedTracks, lastSession: lastSession })
+  };
   return (
     <>
       <div
@@ -426,19 +433,15 @@ const Hero = ({
                           className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
                           onClick={() => {
                             likedTracks.includes(songSectionData.songs[0]?.id)
-                              ? dispatch(
-                                  removeIDfromFavourites(
-                                    songSectionData.songs[0]?.id
-                                  )
+                              ? removeFromFavourites(
+                                  songSectionData.songs[0]?.id
                                 )
-                              : dispatch(
-                                  addIDtoFavourites(
-                                    songSectionData.songs[0]?.id
-                                  )
-                                );
+                              : addToFavourites(songSectionData.songs[0]?.id);
                           }}
                         >
-                          {likedTracks.includes(songSectionData.songs[0]?.id) ? (
+                          {likedTracks.includes(
+                            songSectionData.songs[0]?.id
+                          ) ? (
                             <FcLike className="text-2xl" />
                           ) : (
                             <svg

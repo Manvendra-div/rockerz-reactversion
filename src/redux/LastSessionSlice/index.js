@@ -8,6 +8,9 @@ export const LastSessionSlice = createSlice({
   name: "LastSession",
   initialState,
   reducers: {
+    updateLastSessionRedux: (state, action) => {
+      state.value = action.payload;
+    },
     addIDtoLastSession: (state, action) => {
       if (state.value.includes(action.payload)) {
         const index = state.value.indexOf(action.payload);
@@ -20,6 +23,6 @@ export const LastSessionSlice = createSlice({
   },
 });
 
-export const { addIDtoLastSession } = LastSessionSlice.actions;
+export const { addIDtoLastSession,updateLastSessionRedux } = LastSessionSlice.actions;
 
 export default LastSessionSlice.reducer;
