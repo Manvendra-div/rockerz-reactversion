@@ -21,15 +21,8 @@ import {
   addIDtoFavourites,
   removeIDfromFavourites,
 } from "../redux/FavouritesTracksSlice/index.js";
+import { fetchData } from "../utils/FetchData.js";
 
-const fetchData = async (URL) => {
-  try {
-    const response = await axios.get(URL);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
 
 const Hero = ({
   toggleNotification,
@@ -84,13 +77,6 @@ const Hero = ({
         setappearSongCard(true);
       }, 150);
     }, 100);
-  };
-  const pushNotificationForLike = () => {
-    toggleNotification(true);
-    addNotifyContent("this feature will be available soon");
-    setTimeout(() => {
-      toggleNotification(false);
-    }, 4000);
   };
   const fetchHomePage = async () => {
     dispatch(stopLoading());
@@ -272,11 +258,9 @@ const Hero = ({
   };
   const addToFavourites = (id) => {
     dispatch(addIDtoFavourites(id));
-    updateDB({ favourites: likedTracks, lastSession: lastSession })
   };
   const removeFromFavourites = (id) => {
     dispatch(removeIDfromFavourites(id));
-    updateDB({ favourites: likedTracks, lastSession: lastSession })
   };
   return (
     <>

@@ -10,27 +10,17 @@ import {
 } from "../redux/FavouritesTracksSlice";
 import { FcLike } from "react-icons/fc";
 import { closeDialog } from "../redux/ToggleSlice/DialogToggleSlice";
-import { updateDB } from "../utils/FirestoreManager";
 
 const SongCard = ({ data, index }) => {
   const dispatch = useDispatch();
   const playnewsong = useSelector((state) => state.currentTrack.trackIndex);
   const likedTracks = useSelector((state) => state.favouriteTrack.value);
-  const lastSession = useSelector((state) => state.lastSession.value);
   const throwPlayer = (song) => {
     dispatch(closeDialog());
     dispatch(setCurrentTrack({ trackData: song, trackIndex: playnewsong + 1 }));
     setTimeout(() => {
       dispatch(launchPlayer());
     }, 200);
-  };
-  const addToFavourites = (id) => {
-    dispatch(addIDtoFavourites(id));
-    setTimeout(updateDB({ favourites: likedTracks, lastSession: lastSession }),500)
-  };
-  const removeFromFavourites = (id) => {
-    dispatch(removeIDfromFavourites(id));
-    setTimeout(updateDB({ favourites: likedTracks, lastSession: lastSession }),500)
   };
   return (
     <div className="flex mb-3 relative rounded-xl overflow-hidden m-1 group backdrop-blur-lg bg-white/5 border border-gray-400 select-none">
@@ -57,8 +47,8 @@ const SongCard = ({ data, index }) => {
           className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
           onClick={() =>
             likedTracks.includes(data.id)
-              ? removeFromFavourites(data.id)
-              : addToFavourites(data.id)
+              ? dispatch(removeIDfromFavourites(data.id))
+              : dispatch(addIDtoFavourites(data.id))
           }
         >
           {likedTracks.includes(data.id) ? (

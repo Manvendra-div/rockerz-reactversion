@@ -11,7 +11,6 @@ export const LoginSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       localStorage.setItem("userData",JSON.stringify(state.user));
-      console.log(state.user);
     },
     clearUser: (state) => {
       state.user = null;

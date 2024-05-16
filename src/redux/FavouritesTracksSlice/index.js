@@ -13,13 +13,10 @@ export const FavouriteTrackSlice = createSlice({
     },
     addIDtoFavourites: (state, action) => {
       state.value.push(action.payload);
-      console.log(state.value);
     },
     removeIDfromFavourites: (state, action) => {
       const index = state.value.indexOf(action.payload);
       state.value.splice(index, 1);
-      console.log("removed ", action.payload, " from favorites");
-      console.log(state.value);
     },
   },
 });

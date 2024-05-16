@@ -18,7 +18,7 @@ import { auth, provider } from "../firebase/config";
 import SongCard from "./SongCard";
 import { getSongDataByID } from "../utils/getSongDataByID";
 import { updateFavouritesRedux } from "../redux/FavouritesTracksSlice";
-import { getFavourites, getLastSession } from "../utils/FirestoreManager";
+import { getFavourites, getLastSession, updateDB } from "../utils/FirestoreManager";
 import { updateLastSessionRedux } from "../redux/LastSessionSlice";
 
 const SideBar = () => {
@@ -40,13 +40,20 @@ const SideBar = () => {
       });
   };
   useEffect(() => {
-    getFavourites().then((data) => {
-      dispatch(updateFavouritesRedux(data));
-    });
-    getLastSession().then((data) => {
-      dispatch(updateLastSessionRedux(data));
-    });
-  }, []);
+    if(isLogined){
+      getFavourites().then((data) => {
+        dispatch(updateFavouritesRedux(data));
+      });
+      getLastSession().then((data) => {
+        dispatch(updateLastSessionRedux(data));
+      });
+    }
+  }, [isLogined]);
+  useEffect(() => {
+    if(lastSession.length > 0) {
+      updateDB({ favourites: likedTracks, lastSession: lastSession });
+    }
+  }, [likedTracks,lastSession]);
   const SignOut = () => {
     signOut(auth)
       .then(() => {
@@ -61,7 +68,7 @@ const SideBar = () => {
         title: "Google Login",
         content: (
           <button
-            className="flex justify-between items-center bg-gray-100 p-2 m-16 w-[60%] md:w-[33%] rounded-lg shadow-gray-600 text-black border-2 border-black"
+            className="flex justify-between items-center bg-gray-100 p-2 m-16 w-[200px] rounded-lg shadow-gray-600 text-black border-2 border-black"
             onClick={handleGoogleClick}
           >
             <img

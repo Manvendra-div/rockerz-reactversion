@@ -22,8 +22,8 @@ export const getFavourites = async () => {
 };
 
 export const getLastSession = async () => {
-  if ((await getData()).lastSession) return (await getData()).lastSession;
-  else return [];
+  if ((await getData()).lastSession) return (await getData()).lastSession
+  else return []
 };
 export const updateDB = async (data) => {
   await addData({ favourites: data.favourites, lastSession: data.lastSession });
