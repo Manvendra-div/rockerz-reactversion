@@ -132,7 +132,7 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
         <span className="p-3 text-sm xl:text-xl">
           Made with ❤️ by{" "}
           <a
-            href="https://aboutmanvendra.netlify.app"
+            href="https://manvendrasingh.net.in"
             className="text-emerald-500 underline"
           >
             Manvendra
