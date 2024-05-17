@@ -31,12 +31,12 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
   const cardState = useSelector((state) => state.dialogSlice.state);
   const contentOfCard = useSelector((state) => state.dialogSlice.content);
   const externalTitle = useSelector((state) => state.dialogSlice.title);
-  const copyBtn = (pushAlert, addContentAlert) => {
-    pushAlert(true);
-    addContentAlert("link has been copied to clipboard");
-    setTimeout(() => {
-      pushAlert(false);
-    }, 4000);
+  const copyBtn = () => {
+    // pushAlert(true);
+    // addContentAlert("link has been copied to clipboard");
+    // setTimeout(() => {
+    //   pushAlert(false);
+    // }, 4000);
   };
   const cardContent = {
     title: "Share this project with your friends",
@@ -98,7 +98,8 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
           <span className="font-semibold text-sm md:text-lg m-3 overflow-x-hidden whitespace-nowrap w-[80%]">
             <p
               className={`${
-                externalTitle === "Last Session" ||  externalTitle === "Favourites"
+                externalTitle === "Last Session" ||
+                externalTitle === "Favourites"
                   ? cardContent?.title
                   : contentOfCard?.title
               }`}
@@ -120,8 +121,9 @@ const DialogTemplate = ({ pushNoti, addContentNoti }) => {
           {externalTitle === undefined ? cardContent.content : contentOfCard}
           <p
             className={`${
-              (externalTitle === "Last Session" || externalTitle === "Favourites") &&
-                contentOfCard === undefined
+              (externalTitle === "Last Session" ||
+                externalTitle === "Favourites") &&
+              contentOfCard === undefined
                 ? "block"
                 : "hidden"
             } text-gray-400 text-3xl font-semibold p-3 opacity-80`}

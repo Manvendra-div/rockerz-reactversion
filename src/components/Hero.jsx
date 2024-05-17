@@ -23,13 +23,7 @@ import {
 } from "../redux/FavouritesTracksSlice/index.js";
 import { fetchData } from "../utils/FetchData.js";
 
-
-const Hero = ({
-  toggleNotification,
-  addNotifyContent,
-  playnewsong,
-  setplaynewsong,
-}) => {
+const Hero = () => {
   const dispatch = useDispatch();
   const [songSectionData, setSongSectionData] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
@@ -38,6 +32,7 @@ const Hero = ({
   const [finalSearchQuery, setfinalSearchQuery] = useState("");
   const [showInputField, setshowInputField] = useState(false);
   const [appearSongCard, setappearSongCard] = useState(false);
+  const [playnewsong, setplaynewsong] = useState(0);
   const loginedUser = useSelector((state) => state.loginState.user);
   const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const ContractSideBar = () => {

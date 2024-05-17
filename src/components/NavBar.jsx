@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import DialogTemplate from "./Dialog";
 import { showDialog } from "../redux/ToggleSlice/DialogToggleSlice";
-const NavBar = ({ toggleNotification, addNotifyContent }) => {
+const NavBar = () => {
   const dispatch = useDispatch();
   const [navBrand, setnavBrand] = useState(false);
   useEffect(() => {
@@ -14,8 +14,6 @@ const NavBar = ({ toggleNotification, addNotifyContent }) => {
   return (
     <>
       <DialogTemplate
-        pushNoti={toggleNotification}
-        addContentNoti={addNotifyContent}
       />
       <div className="navHeader">
         <Transition
