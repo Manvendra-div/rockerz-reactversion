@@ -20,6 +20,7 @@ import { getSongDataByID } from "../utils/getSongDataByID";
 import { updateFavouritesRedux } from "../redux/FavouritesTracksSlice";
 import { getFavourites, getLastSession, updateDB } from "../utils/FirestoreManager";
 import { updateLastSessionRedux } from "../redux/LastSessionSlice";
+import { startLoading, stopLoading } from "../redux/LoadingSlice";
 
 const SideBar = () => {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ const SideBar = () => {
     );
   };
   const prepareLastSessionPopup = async () => {
+    dispatch(startLoading())
     try {
       const sessionData = await Promise.all(
         lastSession.map(async (element, index) => {
@@ -103,7 +105,7 @@ const SideBar = () => {
                   sessionData.length >= 3
                     ? "overflow-y-auto"
                     : "overflow-hidden"
-                } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+                } max-h-[500px] md:max-h-[300px] p-2 w-full border-dashed border-y-2 border-gray-300`}
               >
                 {sessionData.map((track, index) => (
                   <SongCard data={track} key={index} index={index} />
@@ -120,11 +122,13 @@ const SideBar = () => {
           })
         );
       }
+      setTimeout(()=>dispatch(stopLoading()),200)
     } catch (error) {
       console.error("Error preparing last session popup:", error);
     }
   };
   const prepareFavouritesPopup = async () => {
+    dispatch(startLoading())
     try {
       const sessionData = await Promise.all(
         likedTracks.map(async (element, index) => {
@@ -144,7 +148,7 @@ const SideBar = () => {
                   sessionData.length >= 3
                     ? "overflow-y-auto"
                     : "overflow-hidden"
-                } max-h-[500px] md:max-h-[300px] px-2 w-full`}
+                } max-h-[500px] md:max-h-[300px] p-2 w-full border-dashed border-y-2 border-gray-300`}
               >
                 {sessionData.map((track, index) => (
                   <SongCard data={track} key={index} index={index} />
@@ -161,6 +165,7 @@ const SideBar = () => {
           })
         );
       }
+      setTimeout(()=>dispatch(stopLoading()),200)
     } catch (error) {
       console.error("Error preparing last session popup:", error);
     }
