@@ -4,6 +4,8 @@
 logs
 **/*.backup.*
 **/*.back.*
+.firebase
+dist
 
 node_modules
 bower_components

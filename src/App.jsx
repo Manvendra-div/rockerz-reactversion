@@ -1,67 +1,25 @@
-import Hero from "./components/Hero";
-import NavBar from "./components/NavBar";
-import { useState } from "react";
 import { Transition } from "@headlessui/react";
+import HomePage from "./HomePage";
 import Player from "./components/Player";
-import Footer from "./components/Footer";
-import Loading from "./components/LoadingAnimation";
-import Notify from "./components/Notify";
-import Notice from "./components/Notice";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [currentTrack, setcurrentTrack] = useState(null);
-  const [loadingState, setloadingState] = useState(false);
-  const [isNotify, setIsNotifyVisible] = useState(false);
-  const [appearPlayer, setappearPlayer] = useState(false);
-  const [triggerPlayernew, settriggerPlayernew] = useState(0);
-  const [notifyContent, setNotifyContent] = useState("");
+  const appearPlayer = useSelector((state) => state.player.value);
   return (
     <>
-    <Notice />
-      <div className="flex flex-col justify-between items-center min-h-screen">
-        <NavBar
-          toggleNotification={setIsNotifyVisible}
-          addNotifyContent={setNotifyContent}
-        />
-        <Hero
-          setTrack={setcurrentTrack}
-          loadinFunc={setloadingState}
-          toggleNotification={setIsNotifyVisible}
-          addNotifyContent={setNotifyContent}
-          showPlayer={setappearPlayer}
-          playnewsong={triggerPlayernew}
-          setplaynewsong={settriggerPlayernew}
-        />
-
-        {loadingState && <Loading />}
-
-        <Transition
-          show={appearPlayer}
-          className="sticky bottom-0 z-20 w-full"
-          enter="transition-all ease-in-out duration-500 delay-[200ms]"
-          enterFrom="opacity-0 translate-y-6"
-          enterTo="opacity-100 translate-y-0"
-          leave="transition-all ease-in-out duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Player track={currentTrack} />
-        </Transition>
-
-        <Transition
-          show={isNotify}
-          className="flex justify-center"
-          enter="transition-all ease-in-out duration-500 delay-[200ms]"
-          enterFrom="opacity-0 translate-y-6"
-          enterTo="opacity-100 translate-y-0"
-          leave="transition-all ease-in-out duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Notify content={notifyContent} setNotifyState={setIsNotifyVisible} />
-        </Transition>
-        <Footer />
-      </div>
+      <HomePage />
+      <Transition
+        show={appearPlayer}
+        className="sticky bottom-0 z-20 w-full"
+        enter="transition-all ease-in-out duration-500 delay-[200ms]"
+        enterFrom="opacity-0 translate-y-6"
+        enterTo="opacity-100 translate-y-0"
+        leave="transition-all ease-in-out duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <Player />
+      </Transition>
     </>
   );
 }

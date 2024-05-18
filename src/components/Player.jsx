@@ -6,36 +6,39 @@ import { Transition } from "@headlessui/react";
 import Loading from "./LoadingAnimation";
 import parse from "html-react-parser";
 import BASE_API from "../BASE_API.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addIDtoLastSession } from "../redux/LastSessionSlice/index.js";
+import { updateAutoPlay } from "../redux/AutoPlayChainSlice/index.js";
+import { FcLike } from "react-icons/fc";
+import {
+  addIDtoFavourites,
+  removeIDfromFavourites,
+} from "../redux/FavouritesTracksSlice/index.js";
+import { fetchData } from "../utils/FetchData.js";
 
-const fetchData = async (URL) => {
-  try {
-    const response = await axios.get(URL);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-const Player = ({ track }) => {
+const Player = () => {
+  const track = useSelector((state) => state.currentTrack.trackData);
+  const trackIndex = useSelector((state) => state.currentTrack.trackIndex);
+  const likedTracks = useSelector((state) => state.favouriteTrack.value);
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playerData, setPlayerData] = useState(null);
-  const [isfromHero, setIsfromHero] = useState(false);
+  const dispatch = useDispatch();
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [nextSong, setNextSong] = useState([]);
+  const nextSong = useSelector((state) => state.nextSongchain.value);
   const [isPlayerExpanded, setIsPlayerExpanded] = useState(true);
   const getTrackData = async (Trackid) => {
     try {
       const trackData = await fetchData(`${BASE_API}/api/songs/${Trackid}`);
       const songData = trackData?.data[0];
       const getNextTrack = async () => {
-        setNextSong([]);
+        dispatch(updateAutoPlay([]));
         const nexttrack = await fetchData(
           `${BASE_API}/api/songs/${songData.id}/suggestions`
         );
-        setNextSong(nexttrack.data);
+        dispatch(updateAutoPlay(nexttrack.data));
       };
       if (songData) {
         // setCurrentSongIndex(currentSongIndex + 1);
@@ -60,12 +63,13 @@ const Player = ({ track }) => {
   };
 
   const setNewTrack = (id) => {
-    setIsfromHero(false);
+    dispatch(addIDtoLastSession(id));
     getTrackData(id);
   };
   useEffect(() => {
-    getTrackData(track[0].id);
-  }, [track[1]]);
+    getTrackData(track.id);
+    dispatch(addIDtoLastSession(track.id));
+  }, [trackIndex]);
   useEffect(() => {
     if (audioRef.current && isPlaying) {
       audioRef.current.play();
@@ -156,24 +160,49 @@ const Player = ({ track }) => {
               className={`thumbNail self-center`}
             />
           </Transition>
-          <div
-            className={`songContainerPlayer overflow-x-hidden w-full ${
-              isPlayerExpanded ? "text-center" : "text-start"
-            }`}
-          >
-            <p
-              className={`songTitle ${
-                playerData?.song?.name?.length > 20
-                  ? "hover:animate-marquee whitespace-nowrap"
-                  : ""
+          <div className={`flex ${isPlayerExpanded ? "flex-col" : ""} w-full`}>
+            <div
+              className={`songContainerPlayer overflow-x-hidden w-full ${
+                isPlayerExpanded ? "text-center" : "text-start"
               }`}
-              dangerouslySetInnerHTML={{ __html: playerData?.song?.name }}
-            />
-            <p className="text-gray-300 text-sm md:text-base select-none">
-              {playerData?.song.artists.primary
-                .map((name) => name.name)
-                .join(", ")}
-            </p>
+            >
+              <p
+                className={`songTitle ${
+                  playerData?.song?.name?.length > 20
+                    ? "hover:animate-marquee whitespace-nowrap"
+                    : ""
+                }`}
+                dangerouslySetInnerHTML={{ __html: playerData?.song?.name }}
+              />
+              <p className="text-gray-300 text-sm md:text-base select-none">
+                {playerData?.song.artists.primary
+                  .map((name) => name.name)
+                  .join(", ")}
+              </p>
+            </div>
+            <button
+              className="hover:scale-110 transition m-4 self-center"
+              onClick={() =>
+                likedTracks.includes(playerData?.song.id)
+                  ? dispatch(removeIDfromFavourites(playerData?.song.id))
+                  : dispatch(addIDtoFavourites(playerData?.song.id))
+              }
+            >
+              {likedTracks.includes(playerData?.song.id) ? (
+                <FcLike className="text-2xl" />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="bi bi-heart"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
         <div
@@ -186,9 +215,11 @@ const Player = ({ track }) => {
             src={playerData?.song.downloadUrl[4].url}
             onTimeUpdate={handleTimeUpdate}
           />
+
           <button className="playBtn" onClick={togglePlay}>
             {isPlaying ? <BiPause size={50} /> : <BiPlay size={50} />}
           </button>
+
           <input
             type="range"
             min="0"

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa6";
 import parse from "html-react-parser";
@@ -14,8 +14,10 @@ import {
   WhatsappShareButton,
   XIcon,
 } from "react-share";
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Transition } from "@headlessui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { closeDialog } from "../redux/ToggleSlice/DialogToggleSlice";
 const shareData = `
 🎵 Explore Rockerz WEB
 
@@ -24,21 +26,18 @@ Discover music like never before with Rockerz WEB! 🚀 Your go-to search engine
 
 const projectUrl = "https://rockerzwebreact.netlify.app";
 
-const copyBtn = (pushAlert,addContentAlert) => {
-  pushAlert(true);
-  addContentAlert("link has been copied to clipboard");
-  setTimeout(() => {
-    pushAlert(false);
-  }, 4000);
-};
-const ShareCard = ({
-  toggleFunc,
-  pushNoti,
-  addContentNoti,
-  cardState,
-  contentOfCard,
-}) => {
-  
+const DialogTemplate = ({ pushNoti, addContentNoti }) => {
+  const dispatch = useDispatch();
+  const cardState = useSelector((state) => state.dialogSlice.state);
+  const contentOfCard = useSelector((state) => state.dialogSlice.content);
+  const externalTitle = useSelector((state) => state.dialogSlice.title);
+  const copyBtn = () => {
+    // pushAlert(true);
+    // addContentAlert("link has been copied to clipboard");
+    // setTimeout(() => {
+    //   pushAlert(false);
+    // }, 4000);
+  };
   const cardContent = {
     title: "Share this project with your friends",
     content: (
@@ -58,15 +57,14 @@ const ShareCard = ({
         <LinkedinShareButton title={shareData} url={projectUrl}>
           <LinkedinIcon className="w-10 xl:w-20" round />
         </LinkedinShareButton>
-        <CopyToClipboard text={`${projectUrl}\n\n${shareData}`}
-          onCopy={() => copyBtn(pushNoti,addContentNoti)}>
-          <button
-          className="backdrop-blur-sm bg-white/10 p-3 rounded-xl shadow-xl focus:shadow border-gray-400 border-[1px] focus-within:border-[#EA580C]"
+        <CopyToClipboard
+          text={`${projectUrl}\n\n${shareData}`}
+          onCopy={() => copyBtn(pushNoti, addContentNoti)}
         >
-          <FaCopy className="text-lg xl:text-4xl" />
-        </button>
+          <button className="backdrop-blur-sm bg-white/10 p-3 rounded-xl shadow-xl focus:shadow border-gray-400 border-[1px] focus-within:border-[#EA580C]">
+            <FaCopy className="text-lg xl:text-4xl" />
+          </button>
         </CopyToClipboard>
-        
       </div>
     ),
   };
@@ -81,7 +79,7 @@ const ShareCard = ({
       leaveTo="opacity-0"
       className="fixed z-40 h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 top-0 left-0"
       onClick={() => {
-        toggleFunc(false);
+        dispatch(closeDialog());
       }}
     >
       <Transition.Child
@@ -100,28 +98,43 @@ const ShareCard = ({
           <span className="font-semibold text-sm md:text-lg m-3 overflow-x-hidden whitespace-nowrap w-[80%]">
             <p
               className={`${
-                (contentOfCard===undefined ? cardContent?.title : contentOfCard?.title).length > 37 ? "hover:animate-marquee" : ""
+                externalTitle === "Last Session" ||
+                externalTitle === "Favourites"
+                  ? cardContent?.title
+                  : contentOfCard?.title
               }`}
             >
-              {contentOfCard===undefined ? parse(cardContent.title):parse(contentOfCard?.title)}
+              {externalTitle === undefined
+                ? parse(cardContent.title)
+                : parse(externalTitle)}
             </p>
           </span>
           <IoClose
             size={30}
             className="cursor-pointer mx-2"
             onClick={() => {
-              toggleFunc(false);
+              dispatch(closeDialog());
             }}
           />
         </div>
-
         <div className="my-3 py-4 backdrop-blur-sm bg-black/30 border-y-[1px] border-black flex flex-wrap justify-center items-center w-full">
-        {contentOfCard===undefined ? cardContent.content:contentOfCard.content}
+          {externalTitle === undefined ? cardContent.content : contentOfCard}
+          <p
+            className={`${
+              (externalTitle === "Last Session" ||
+                externalTitle === "Favourites") &&
+              contentOfCard === undefined
+                ? "block"
+                : "hidden"
+            } text-gray-400 text-3xl font-semibold p-3 opacity-80`}
+          >
+            Nothing to see here
+          </p>
         </div>
         <span className="p-3 text-sm xl:text-xl">
           Made with ❤️ by{" "}
           <a
-            href="https://aboutmanvendra.netlify.app"
+            href="https://manvendrasingh.net.in"
             className="text-emerald-500 underline"
           >
             Manvendra
@@ -133,4 +146,4 @@ const ShareCard = ({
   );
 };
 
-export default ShareCard;
+export default DialogTemplate;
